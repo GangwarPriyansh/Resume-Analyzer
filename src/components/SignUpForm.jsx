@@ -11,7 +11,6 @@ export default function SignUpForm() {
     confirmPassword: "",
   });
 
-  
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
