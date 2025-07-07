@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* globally defined kari hai toast ki css ko for right position */
+.toast-top-right-custom {
+  top: 80px !important; 
+}
