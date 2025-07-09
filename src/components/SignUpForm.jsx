@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { setUser } from "../userSlice";
 
 export default function SignUpForm() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -35,8 +38,18 @@ export default function SignUpForm() {
 
       if (res.ok) {
         toast.success("Account created successfully!");
-        //for storing tocken
-        navigate("/login");
+        //for storing data in redux
+        dispatch(
+          setUser({
+            user: {
+              name: formData.name,
+              email: formData.email,
+            },
+            token: data.token,
+            isAuthenticated: true,
+          })
+        );
+        navigate("/");
       } else {
         toast.error(data.message || "signup failed");
       }

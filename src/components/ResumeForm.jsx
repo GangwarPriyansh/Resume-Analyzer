@@ -46,8 +46,9 @@ export default function ResumeForm() {
   };
 
   const isValid = () => {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-    const urlRegex = /^(https?:\/\/)?([\w-]+)\.([a-z]{2,6})(\/[\w-]*)*\/?$/;
+    // const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    const emailRegex = /^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$/;
+    const urlRegex = /^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(:\d+)?(\/[\w-./?%&=#]*)?$/;
     const phoneRegex = /^\d{10}$/;
 
     if (!emailRegex.test(formData.email)) {
@@ -55,15 +56,15 @@ export default function ResumeForm() {
       return false;
     }
 
-    // if (!urlRegex.test(formData.linkedin)) {
-    //   toast.error("Please enter a valid LinkedIn URL.");
-    //   return false;
-    // }
+    if (!urlRegex.test(formData.linkedin)) {
+      toast.error("Please enter a valid LinkedIn URL.");
+      return false;
+    }
 
-    // if (!urlRegex.test(formData.github)) {
-    //   toast.error("Please enter a valid GitHub URL.");
-    //   return false;
-    // }
+    if (!urlRegex.test(formData.github)) {
+      toast.error("Please enter a valid GitHub URL.");
+      return false;
+    }
     if (!phoneRegex.test(formData.contact)) {
       toast.error("Please enter a valid 10-digit contact number");
       return false;
@@ -77,7 +78,7 @@ export default function ResumeForm() {
     if (!isValid()) return;
     // navigate("/resume-preview", { state: formData });
 
-    toast.info("Details submitted!");
+    toast.info("Details submitted! Please wait");
     setLoading(true);
 
     try {
@@ -97,6 +98,7 @@ export default function ResumeForm() {
           originalData: formData,
         },
       });
+      toast.success("Resume Generated");
     } catch (err) {
       toast.error(err.message || "Failed to enhance resume content");
     }

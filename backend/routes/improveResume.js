@@ -46,7 +46,8 @@ EDUCATION
 [Institution] - [Degree] ([Years])
 [Details]
 
-Keep everything concise and professional. And Ensure that total words in the resume does not exceed more than 280 words as resume should be completed in 1 page the size of the page is a4. 
+Keep everything concise and professional. And Ensure that total words in the resume does not exceed more than 280 words as resume should be completed in 1 page the size of the page is a4.
+be sure that resume does not extend more then 1 page.
 Here is the original content:
 ${JSON.stringify(resumeData, null, 2)}
     `;
