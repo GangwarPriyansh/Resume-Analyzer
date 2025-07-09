@@ -1,9 +1,13 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { setUser } from "../userSlice";
+import { store } from "../store";
 
 export default function LoginForm() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -28,16 +32,24 @@ export default function LoginForm() {
 
       if (res.ok) {
         toast.success("Login successful!");
-        //storing data in local storage
-        
-        localStorage.setItem("user", JSON.stringify(data.user));
+        dispatch(
+          setUser({
+            user: {
+              name: data.user.name,
+              email: data.user.email,
+            },
+            token: data.token,
+            isAuthenticated: true,
+          })
+        );
+
         navigate("/");
       } else {
-        toast.error(data.message || "login failed");
+        toast.error(data.message || "Login failed");
       }
     } catch (err) {
       console.error("Login error:", err);
-      toast.error("server error.Try again later");
+      toast.error("Server error. Try again later");
     }
   };
 

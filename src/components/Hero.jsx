@@ -7,11 +7,11 @@ export default function Hero() {
   return (
     <section id="hero" className="bg-[#1c2331] text-white">
       {/* Hero Section */}
-      <div className="flex flex-col lg:flex-row items-center justify-between p-8">
+      <div className="flex flex-col lg:flex-row md:flex-row items-center justify-between p-8">
         <img
           src="/images/hero_img.png"
           alt="hero image"
-          className="w-full lg:w-[500px] lg:mb-0 mb-6"
+          className="w-full lg:w-[500px] lg:mb-0 mb-6 md:w-[400px] md:mb-0"
         />
 
         <div className="lg:ml-12 max-w-xl text-center lg:text-left">
