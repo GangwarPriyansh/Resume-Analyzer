@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { clearUser } from "../userSlice";
+import { clearUser } from "../slice/userSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faBars } from "@fortawesome/free-solid-svg-icons";
 
@@ -92,16 +92,16 @@ export default function Header() {
           </a>
 
           {isAuthenticated ? (
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col  justify-center">
+              <span className="font-medium text-blue-500 flex justify-center">Hello</span>
               <button
                 onClick={() => setShowDropdown(!showDropdown)}
-                className="flex items-center gap-2"
+                className="flex items-center justify-center gap-2"
               >
-                <span className="font-medium text-blue-500">Hello</span>
                 <span className="font-medium">{user?.name}</span>
                 <FontAwesomeIcon
                   icon={faChevronDown}
-                  className={`w-4 h-4 transition-transform ${
+                  className={`w-4 h-4 transition-transform${
                     showDropdown ? "rotate-180" : ""
                   }`}
                 />

@@ -1,31 +1,42 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { combineReducers } from 'redux';
-import { persistReducer, persistStore } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-import userReducer from './userSlice';
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import sessionStorage from "redux-persist/lib/storage/session";
+import userReducer from "./slice/userSlice";
+import analysisReducer from "./slice/analysisSlice";
+import ResumeFormReducer from './slice/resumeformSlice';
 
 const rootReducer = combineReducers({
-  user: userReducer,
+  user: persistReducer(
+    {
+      key: "user",
+      storage,
+    },
+    userReducer
+  ),
+  analysis: persistReducer(
+    {
+      key: "analysis",
+      storage: sessionStorage,
+    },
+    analysisReducer
+  ),
+  resumeForm: persistReducer(
+    {
+      key: 'resumeForm',
+      storage: sessionStorage,
+    },
+    ResumeFormReducer
+  ),
 });
 
-const persistConfig = {
-  key: 'root',
-  storage,
-  whitelist: ['user'],
-};
-
-const persistedReducer = persistReducer(persistConfig, rootReducer)
-
 export const store = configureStore({
-  reducer: persistedReducer,
-
-  //for implementing redux dev tools
-  devTools: process.env.NODE_ENV !== 'production',
-  
+  reducer: rootReducer,
+  devTools: process.env.NODE_ENV !== "production",
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ['persist/PERSIST'],
+        ignoredActions: ["persist/PERSIST"],
       },
     }),
 });

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { setUser } from "../userSlice";
+import { setUser } from "../slice/userSlice";
 
 export default function SignUpForm() {
   const navigate = useNavigate();

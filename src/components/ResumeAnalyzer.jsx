@@ -1,21 +1,31 @@
 import React, { useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setAnalysisResult, clearAnalysisResult } from "../slice/analysisSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFileAlt,
-  faCloudUploadAlt,
-  faTimesCircle,
-} from "@fortawesome/free-solid-svg-icons";
+import { faFileAlt, faCloudUploadAlt } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 
 export default function ResumeAnalyzer() {
+  const dispatch = useDispatch();
+  const analysis = useSelector((state) => state.analysis.result);
   const [file, setFile] = useState(null);
-  const [analysis, setAnalysis] = useState("");
   const [loading, setLoading] = useState(false);
+
+
+  // for persisting the filename
+  useEffect(() => {
+    const savedFileName = sessionStorage.getItem("resumeFileName");
+    if (savedFileName) {
+      setFile({ name: savedFileName });
+    }
+  }, []);
 
   const handleFileChange = (e) => {
     const selected = e.target.files[0];
     if (selected && selected.type === "application/pdf") {
       setFile(selected);
+      sessionStorage.setItem("resumeFileName", selected.name);
     } else {
       toast.error("Please upload a valid PDF file.");
     }
@@ -23,8 +33,8 @@ export default function ResumeAnalyzer() {
 
   const handleRemoveFile = () => {
     setFile(null);
-    setAnalysis("");
-    // Reset file input
+    dispatch(clearAnalysisResult());
+    sessionStorage.removeItem("resumeFileName");
     document.getElementById("resumeUpload").value = "";
   };
 
@@ -38,38 +48,25 @@ export default function ResumeAnalyzer() {
     formData.append("resume", file);
 
     setLoading(true);
-    setAnalysis("");
+    dispatch(clearAnalysisResult());
 
     try {
-      const uploadRes = await fetch("http://localhost:5000/api/upload/resume", {
+      const res = await fetch("http://localhost:5000/api/upload/resume", {
         method: "POST",
         body: formData,
       });
-      const uploadData = await uploadRes.json();
 
-      // this is for my key call
-      if (uploadRes.ok) {
-        toast.success("Uploaded! Analyzing with AI...");
-        const analyzeRes = await fetch(
-          `http://localhost:5000/api/analyze/${uploadData.filename}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const analyzeData = await analyzeRes.json();
-        if (analyzeRes.ok) {
-          setAnalysis(analyzeData.analysis);
-        } else {
-          toast.error("AI Analysis failed");
-        }
-      } else {
-        toast.error(uploadData.message || "Upload failed");
+      const data = await res.json();
+
+      if (res.ok) {
+        toast.success("Analyzed by AI!");
+        //save to redux
+        dispatch(setAnalysisResult(data.analysis));
+      } else {``
+        toast.error(data.message || "Upload failed");
       }
     } catch (err) {
-      console.error(err);
+      console.error("Upload/AI Error:", err);
       toast.error("Server error. Try again later.");
     } finally {
       setLoading(false);
@@ -116,9 +113,7 @@ export default function ResumeAnalyzer() {
               <button
                 onClick={handleRemoveFile}
                 className="text-red-400 hover:text-red-600 transition"
-                title="Remove File"
               >
-                {/* <FontAwesomeIcon icon={faTimesCircle} />  */}
                 <p>Remove File</p>
               </button>
             </div>
@@ -136,20 +131,16 @@ export default function ResumeAnalyzer() {
         </div>
       </div>
 
-      {/* ai output */}
       {analysis && (
         <div className="bg-[#1c2331] mt-6 p-6 rounded-xl shadow-xl w-full max-w-3xl">
           <h3 className="text-xl font-semibold mb-4 text-blue-400">
             AI Analysis Result:
           </h3>
-          {/* <p className="whitespace-pre-wrap text-gray-200 text-sm">
-            {analysis}
-          </p> */}
           <div
             className="prose prose-invert text-gray-200 text-md"
             dangerouslySetInnerHTML={{
               __html: analysis
-               .replace(/^\*(.*$)/g, '. $1')
+                .replace(/^\*(.*$)/g, ". $1")
                 .replace(
                   /\*\*(.*?)\*\*/g,
                   '<strong class="text-blue-300 font-semibold text-base">$1</strong>'

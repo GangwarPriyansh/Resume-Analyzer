@@ -4,7 +4,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const userRoutes = require("./routes/auth");
 const uploadRoutes = require("./routes/upload");
-const analyzeRoutes = require("./analyze");
+// const analyzeRoutes = require("./analyze");
 const improveResume = require("./routes/improveResume");
 
 const app = express();
@@ -22,7 +22,7 @@ app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/uploads", express.static("uploads"));
 app.use("/api/upload", uploadRoutes)
-app.use("/api/analyze", analyzeRoutes);
+// app.use("/api/analyze", analyzeRoutes);
 app.use("/api/improve-resume", improveResume);
 
 // MongoDB Connection

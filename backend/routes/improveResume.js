@@ -10,45 +10,55 @@ router.post("/", async (req, res) => {
 
   try {
     const prompt = `
-You are an AI resume assistant. Improve this resume content following these rules:
+You are an AI resume assistant. Improve the resume content provided below (in JSON format) following these rules:
 
-1. Return the enhanced resume in plain text format 
-2. Format it with clear section headings in ALL CAPS
-3. Make these improvements:
-   - Fix grammar and punctuation
-   - Use professional language
-   - Keep bullet points concise
-   - Quantify achievements where possible
-4. Maintain this exact structure:
-   
-SUMMARY
-[Improved professional summary]
+1. Return ONLY the improved resume as plain text — no extra comments or explanations.
+2. Use clear section headings in ALL CAPS (e.g., SUMMARY, SKILLS, EXPERIENCE).
+3. Apply these enhancements:
+   - Fix grammar and punctuation.
+   - Use professional and concise language.
+   - Use bullet points where applicable.
+   - Quantify achievements where possible.
 
-SKILLS 
-- Frontend: [Skill 1],[Skill 2]
-- backend:[Skill 1],[skill 3] etc.
+4. Maintain this strict structure and order:
+   SUMMARY
+   [Improved professional summary]
 
-EXPERIENCE (it should not be lenghty and explain the achivement in short)
-[Company] - [Position] ([Years])
-- [Achievement 1]
-- [Achievement 2]
+   SKILLS
+   - Frontend: [Skills]
+   - Backend: [Skills]
+   - Tools: [Skills]
 
-PROJECTS (it should not be lengthy just explain what it does and technologies used)
-[Project Name]
-- [Description]
-- [Technologies]
+   EXPERIENCE
+   [Company]  [Position] ([Years])
+   - [Achievement]
+   - [Achievement]
 
-ACHIEVEMENTS
-- [Achievement 1]
-- [Achievement 2]
+   PROJECTS
+   [Project Title]
+   - [Brief Description]
+   - [Technologies Used]
 
-EDUCATION
-[Institution] - [Degree] ([Years])
-[Details]
+   ACHIEVEMENTS
+   - [Achievement 1]
+   - [Achievement 2]
 
-Keep everything concise and professional. And Ensure that total words in the resume does not exceed more than 280 words as resume should be completed in 1 page the size of the page is a4.
-be sure that resume does not extend more then 1 page.
-Here is the original content:
+   EDUCATION
+   [Institution] [Degree] ([Years])
+   - [Details]
+
+5. After these sections, include any additional fields **not named**: name, contact, email, linkedin, github, summary, education, skills, projects, experience, or achievements.
+   - Treat them as custom sections.
+   - Use the field name (in ALL CAPS) as the section heading.
+   - Format the content clearly underneath.
+   - Do NOT prefix with “THIS_IS_A_CUSTOM_SECTION” or similar.
+   - Do NOT repeat name, contact, email, linkedin, or github.
+   - Also check if there is any spelling mistake and also make the text formal of custom fields also.
+
+6. Limit total content to a **maximum of 280 words** to fit a single A4 page. the resume must be of one page
+
+Here is the original resume content in JSON:
+
 ${JSON.stringify(resumeData, null, 2)}
     `;
 
@@ -61,7 +71,7 @@ ${JSON.stringify(resumeData, null, 2)}
     });
 
     const improvedResume = response.text;
-    res.status(200).send(improvedResume); 
+    res.status(200).send(improvedResume);
   } catch (err) {
     console.error("Resume Improvement Error:", err);
     res.status(500).send("Failed to improve resume: " + err.message);
