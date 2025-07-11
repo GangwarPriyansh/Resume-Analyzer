@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { setUser } from "../userSlice";
+import { setUser } from "../slice/userSlice";
 import { store } from "../store";
 
 export default function LoginForm() {
