@@ -28,9 +28,14 @@ export default function Header() {
         <button onClick={() => navigate("/")} className="hover:text-blue-400">
           Home
         </button>
-        <a href="#" className="hover:text-blue-400">
+        <button
+          onClick={() => navigate("/about")}
+          className="hover:text-blue-400 transition-colors"
+        >
           About
-        </a>
+        </button>
+
+        {/* <button onClick={()=> navigate("/about")} className="hover:text-blue-400" */}
 
         {isAuthenticated ? (
           <div className="relative">
@@ -70,7 +75,7 @@ export default function Header() {
       </nav>
 
       {/* mobile view */}
-      <button 
+      <button
         className="md:hidden text-xl"
         onClick={() => setShowMobileMenu(!showMobileMenu)}
       >
@@ -78,11 +83,11 @@ export default function Header() {
       </button>
       {showMobileMenu && (
         <nav className="md:hidden absolute top-full left-0 right-0 bg-[#0d1117] flex flex-col items-center py-4 gap-4 z-20">
-          <button 
+          <button
             onClick={() => {
               navigate("/");
               setShowMobileMenu(false);
-            }} 
+            }}
             className="hover:text-blue-400"
           >
             Home
@@ -93,7 +98,9 @@ export default function Header() {
 
           {isAuthenticated ? (
             <div className="flex flex-col  justify-center">
-              <span className="font-medium text-blue-500 flex justify-center">Hello</span>
+              <span className="font-medium text-blue-500 flex justify-center">
+                Hello
+              </span>
               <button
                 onClick={() => setShowDropdown(!showDropdown)}
                 className="flex items-center justify-center gap-2"

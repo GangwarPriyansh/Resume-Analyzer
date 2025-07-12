@@ -66,9 +66,9 @@ export default function ResumePreview() {
   };
 
   return (
-    <div className="min-h-screen bg-[#3b3f45] text-black py-8 px-4 print:bg-white">
-      <div className="flex justify-center items-start font-bold text-white text-center p-5 text-3xl">
-        This is the preview of your Awesome Resume!
+    <div className="min-h-screen bg-gradient-to-br from-[#1a202c] to-[#2d3748] py-12 px-4 sm:px-6 lg:px-8">
+      <div className="flex justify-center items-start font-bold text-white text-center p-5 text-4xl mb-4">
+        <h1>This is the preview of your Awesome Resume!</h1>
       </div>
       <div
         id="resume-content"
@@ -121,13 +121,14 @@ export default function ResumePreview() {
           onClick={() =>
             navigate("/resume-builder", { state: state.originalData })
           }
-          className="bg-gray-600 text-white px-6 py-2 rounded hover:bg-gray-700 transition"
+          className="bg-[#3a4556] text-white font-semibold px-8 py-3 rounded-lg hover:bg-[#4a5568] 
+                            transition-all transform hover:-translate-y-0.5 shadow-lg"
         >
           Edit
         </button>
         <button
           onClick={handlePrint}
-          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
+          className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition transform hover:-translate-y-1 hover:shadow-lg font-medium"
         >
           Download PDF
         </button>
