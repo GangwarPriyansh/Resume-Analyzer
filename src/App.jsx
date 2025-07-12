@@ -20,12 +20,15 @@ import SignUpForm from "./components/SignUpForm";
 import ResumePreview from "./components/ResumePreview";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AuthRedirect from "./components/AuthRedirect";
+import About from "./components/about";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <Router>
+          <ScrollToTop />
           <div className="font-sans">
             <ToastContainer
               position="top-right"
@@ -36,7 +39,7 @@ function App() {
               pauseOnFocusLoss
               draggable
               pauseOnHover
-              className:toast-top-right-custom              
+              className:toast-top-right-custom
               style={{
                 margin: "40px",
               }}
@@ -47,6 +50,7 @@ function App() {
             </div>
             <Routes>
               <Route path="/" element={<Hero />} />
+              <Route path="/about" element={<About />} />
               <Route path="/login" element={<LoginForm />} />
               <Route path="/signup" element={<SignUpForm />} />
               <Route path="/auth-redirect" element={<AuthRedirect />} />
