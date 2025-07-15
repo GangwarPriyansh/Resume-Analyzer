@@ -16,10 +16,10 @@ const userSlice = createSlice({
       state.isAuthenticated = true;
     },
     clearUser: (state,action) => {
-      state.user = action.null;
-      state.user = action.null;
-      state.token = action.null;
-      state.isAuthenticated = action.false;
+      state.user = null;
+      state.user = null;
+      state.token = null;
+      state.isAuthenticated = false;
     },
   },
 });

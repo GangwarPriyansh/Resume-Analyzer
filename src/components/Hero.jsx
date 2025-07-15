@@ -11,7 +11,7 @@ import {
   faMagic,
   faShieldAlt,
   faUsers,
-  faLightbulb
+  faLightbulb,
 } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 
@@ -70,7 +70,7 @@ export default function Hero() {
         </h3>
         <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           {[
-            { value: "10K+", label: "Resumes Created", icon: faUsers },
+            { value: "1K+", label: "Resumes Created", icon: faUsers },
             { value: "95%", label: "Success Rate", icon: faLightbulb },
             { value: "50+", label: "Templates", icon: faFileAlt },
             { value: "24/7", label: "Support", icon: faShieldAlt },
@@ -147,42 +147,14 @@ export default function Hero() {
               <div className="text-5xl mb-6">{feature.icon}</div>
               <h4 className="text-xl font-semibold mb-4 text-blue-400">
                 {feature.title}
-              </h4> 
+              </h4>
               <p className="text-gray-300">{feature.description}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* {!isAuthenticated && (
-        <>
-          <div className="bg-[#181e29] py-16 px-4 md:px-0 text-center mt-16">
-            <div className="max-w-4xl mx-auto">
-              <h3 className="text-2xl md:text-4xl font-bold mb-6">
-                Ready to Create Your Professional Resume?
-              </h3>
-              <p className="text-gray-400 mb-8 text-lg max-w-2xl mx-auto">
-                Join thousands of professionals who've accelerated their careers
-                with ResumeBuddy.
-              </p>
-              <div className="flex flex-wrap justify-center gap-4">
-                <button
-                  onClick={() => navigate("/signup")}
-                  className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition transform hover:-translate-y-1 hover:shadow-lg font-bold text-lg"
-                >
-                  Get Started for Free
-                </button>
-                <button
-                  onClick={() => navigate("/login")}
-                  className="bg-transparent border-2 border-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-600 transition transform hover:-translate-y-1 hover:shadow-lg font-bold text-lg"
-                >
-                  Login
-                </button>
-              </div>
-            </div>
-          </div>
-        </>
-      )} */}
+      {/* fotter section  */}
       {!isAuthenticated ? (
         <div className="bg-[#181e29] py-16 px-4 md:px-0 text-center mt-16">
           <div className="max-w-4xl mx-auto">

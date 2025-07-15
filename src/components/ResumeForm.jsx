@@ -294,9 +294,10 @@ export default function ResumeForm() {
                 <button
                   type="button"
                   onClick={handleAddCustomField}
-                  className="w-full sm:w-auto bg-green-600 px-6 py-3 rounded-lg text-white hover:bg-green-700 
-                            transition-all transform hover:-translate-y-0.5 flex items-center justify-center gap-2
-                            shadow-lg"
+                  className={`${
+                    loading || cancle ? "opacity-50 cursor-not-allowed" : ""
+                  } bg-green-600 px-4 py-2 rounded text-white hover:bg-green-700 transition`}
+                  disabled={loading || cancle}
                 >
                   <FontAwesomeIcon icon={faPlus} />
                   <span>Add Section</span>
@@ -304,12 +305,15 @@ export default function ResumeForm() {
               </div>
 
               <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-10">
+                {/* Generate Resume Button */}
                 <button
                   type="submit"
-                  className="bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold px-8 py-3 rounded-lg 
-            hover:from-blue-700 hover:to-blue-800 transition-all transform hover:-translate-y-0.5 
-            shadow-lg min-w-[140px] flex items-center justify-center gap-2"
-                  disabled={loading}
+                  className={`bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold px-8 py-3 rounded-lg 
+                  hover:from-blue-700 hover:to-blue-800 transition-all transform hover:-translate-y-0.5 
+                  shadow-lg min-w-[140px] flex items-center justify-center gap-2 ${
+                    loading || cancle ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                  disabled={cancle}
                 >
                   {loading ? (
                     <>
@@ -339,20 +343,22 @@ export default function ResumeForm() {
                       );
                     }, 0);
                   }}
-                  className="bg-[#3a4556] text-white font-semibold px-8 py-3 rounded-lg hover:bg-[#4a5568] 
-                            transition-all transform hover:-translate-y-0.5 shadow-lg
-                            min-w-[140px]"
+                  className={`${
+                    loading || cancle ? "opacity-50 cursor-not-allowed" : ""
+                  } bg-[#3a4556] text-white font-semibold px-8 py-3 rounded-lg hover:bg-[#4a5568] 
+                    transition-all transform hover:-translate-y-0.5 shadow-lg min-w-[140px]`}
+                  disabled={loading || cancle}
                 >
                   Clear Form
                 </button>
+
                 <button
                   type="button"
-                  disabled={loading || cancle}
                   className={`${
                     loading || cancle ? "opacity-50 cursor-not-allowed" : ""
                   } bg-red-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-red-700
-                  transition-all transform hover:-translate-y-0.5 shadow-lg
-                  min-w-[140px]`}
+                  transition-all transform hover:-translate-y-0.5 shadow-lg min-w-[140px]`}
+                  disabled={loading}
                   onClick={async () => {
                     const requiredFields = [
                       "name",
@@ -415,7 +421,6 @@ export default function ResumeForm() {
                   ) : (
                     "Cancel"
                   )}
-                  {/* {cancle ? "Cancelling..." : "Cancel"} */}
                 </button>
               </div>
             </form>

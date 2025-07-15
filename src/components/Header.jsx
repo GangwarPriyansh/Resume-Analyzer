@@ -38,13 +38,15 @@ export default function Header() {
         {/* <button onClick={()=> navigate("/about")} className="hover:text-blue-400" */}
 
         {isAuthenticated ? (
-          <div className="relative">
+          <div className="relative flex-shrink-0">
             <button
               onClick={() => setShowDropdown(!showDropdown)}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 whitespace-nowrap min-w-max"
             >
-              <span className="font-medium text-blue-500">Hello</span>
-              <span className="font-medium">{user?.name}</span>
+              <span className="font-medium text-blue-500 inline-block">
+                Hello
+              </span>
+              <span className="font-medium inline-block">{user?.name}</span>
               <FontAwesomeIcon
                 icon={faChevronDown}
                 className={`w-4 h-4 transition-transform ${
@@ -97,22 +99,24 @@ export default function Header() {
           </a>
 
           {isAuthenticated ? (
-            <div className="flex flex-col  justify-center">
-              <span className="font-medium text-blue-500 flex justify-center">
-                Hello
-              </span>
-              <button
-                onClick={() => setShowDropdown(!showDropdown)}
-                className="flex items-center justify-center gap-2"
-              >
-                <span className="font-medium">{user?.name}</span>
-                <FontAwesomeIcon
-                  icon={faChevronDown}
-                  className={`w-4 h-4 transition-transform${
-                    showDropdown ? "rotate-180" : ""
-                  }`}
-                />
-              </button>
+            <div className="flex flex-col justify-center">
+              <div className="flex item-center gap-2">
+                <span className="font-medium text-blue-500 flex justify-center">
+                  Hello
+                </span>
+                <button
+                  onClick={() => setShowDropdown(!showDropdown)}
+                  className="flex items-center justify-center gap-2"
+                >
+                  <span className="font-medium">{user?.name}</span>
+                  <FontAwesomeIcon
+                    icon={faChevronDown}
+                    className={`w-4 h-4 transition-transform${
+                      showDropdown ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+              </div>
 
               {showDropdown && (
                 <button

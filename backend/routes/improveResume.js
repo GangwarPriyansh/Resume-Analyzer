@@ -10,54 +10,54 @@ router.post("/", async (req, res) => {
 
   try {
     const prompt = `
-You are an AI resume assistant. Improve the resume content provided below (in JSON format) following these rules:
+    You are an AI resume assistant. Improve the resume content provided below (in JSON format) following these rules:
 
-1. Return ONLY the improved resume as plain text — no extra comments or explanations.
-2. Use clear section headings in ALL CAPS (e.g., SUMMARY, SKILLS, EXPERIENCE).
-3. Apply these enhancements:
-   - Fix grammar and punctuation.
-   - Use professional and concise language.
-   - Use bullet points where applicable.
-   - Quantify achievements where possible.
+    1. Return ONLY the improved resume as plain text — no extra comments or explanations.
+    2. Use clear section headings in ALL CAPS (e.g., SUMMARY, SKILLS, EXPERIENCE).
+    3. Apply these enhancements:
+      - Fix grammar and punctuation.
+      - Use professional and concise language.
+      - Use bullet points where applicable.
+      - Quantify achievements where possible.
 
-4. Maintain this strict structure and order:
-   SUMMARY
-   [Improved professional summary]
+    4. Maintain this strict structure and order:
+      SUMMARY
+      [Improved professional summary]
 
-   SKILLS
-   - Frontend: [Skills]
-   - Backend: [Skills]
-   - Tools: [Skills]
+      SKILLS
+      - Frontend: [Skills]
+      - Backend: [Skills]
+      - Tools: [Skills]
 
-   EXPERIENCE
-   [Company]  [Position] ([Years])
-   - [Achievement]
-   - [Achievement]
+      EXPERIENCE
+      [Company]  [Position] ([Years])
+      - [Achievement]
+      - [Achievement]
 
-   PROJECTS
-   [Project Title]
-   - [Brief Description]
-   - [Technologies Used]
+      PROJECTS
+      [Project Title]
+      - [Brief Description]
+      - [Technologies Used]
 
-   ACHIEVEMENTS
-   - [Achievement 1]
-   - [Achievement 2]
+      ACHIEVEMENTS
+      - [Achievement 1]
+      - [Achievement 2]
 
-   EDUCATION
-   [Institution] [Degree] ([Years])
-   - [Details]
+      EDUCATION
+      [Institution] [Degree] ([Years])
+      - [Details]
 
-5. After these sections, include any additional fields **not named**: name, contact, email, linkedin, github, summary, education, skills, projects, experience, or achievements.
-   - Treat them as custom sections.
-   - Use the field name (in ALL CAPS) as the section heading.
-   - Format the content clearly underneath.
-   - Do NOT prefix with “THIS_IS_A_CUSTOM_SECTION” or similar.
-   - Do NOT repeat name, contact, email, linkedin, or github.
-   - Also check if there is any spelling mistake and also make the text formal of custom fields also.
+    5. After these sections, include any additional fields **not named**: name, contact, email, linkedin, github, summary, education, skills, projects, experience, or achievements.
+      - Treat them as custom sections.
+      - Use the field name (in ALL CAPS) as the section heading.
+      - Format the content clearly underneath.
+      - Do NOT prefix with “THIS_IS_A_CUSTOM_SECTION” or similar.
+      - Do NOT repeat name, contact, email, linkedin, or github.
+      - Also check if there is any spelling mistake and also make the text formal of custom fields also.
 
-6. Limit total content to a **maximum of 280 words** to fit a single A4 page. the resume must be of one page
+    6. Limit total content to a **maximum of 280 words** to fit a single A4 page. the resume must be of one page
 
-Here is the original resume content in JSON:
+    Here is the original resume content in JSON:
 
 ${JSON.stringify(resumeData, null, 2)}
     `;
