@@ -49,7 +49,7 @@ export default function About() {
       <div className="py-16 px-4 md:px-12 bg-[#252c3b] mt-12">
         <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           {[
-            { value: "10K+", label: "Users Trust Us", icon: faUsers },
+            { value: "1K+", label: "Users Trust Us", icon: faUsers },
             { value: "95%", label: "Success Rate", icon: faLightbulb },
             { value: "50+", label: "Templates", icon: faFileAlt },
             { value: "24/7", label: "Support", icon: faShieldAlt },

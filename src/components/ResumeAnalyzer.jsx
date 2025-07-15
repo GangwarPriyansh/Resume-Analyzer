@@ -8,7 +8,7 @@ import {
   faCloudUploadAlt,
   faTrash,
   faSpinner,
-  faRobot
+  faRobot,
 } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 
@@ -150,7 +150,7 @@ export default function ResumeAnalyzer() {
                 disabled={loading || !file}
                 className={`w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 px-6 rounded-lg 
                           hover:from-blue-700 hover:to-blue-800 transition-all transform hover:-translate-y-0.5
-                          shadow-lg hover:shadow-blue-500/20 flex items-center justify-center gap-2
+                          shadow-lg flex items-center justify-center gap-2
                           ${
                             !file || loading
                               ? "opacity-70 cursor-not-allowed"
@@ -177,7 +177,7 @@ export default function ResumeAnalyzer() {
         </div>
 
         {analysis && (
-          <div className="bg-[#1e293b] mt-8 p-6 sm:p-8 rounded-2xl shadow-xl border border-[#334155]">
+          <div className="bg-[#1e293b] mt-8 p-6 sm:p-8 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-[#334155]">
             <div className="flex items-center mb-6">
               <div className="mr-3">
                 <FontAwesomeIcon

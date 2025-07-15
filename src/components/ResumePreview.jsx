@@ -39,10 +39,14 @@ export default function ResumePreview() {
           );
         }
         currentSection = line;
+
+        // Convert underscores back to spaces in section headings
+        const displayLine = line.replace(/_/g, " ");
+
         // Section heading
         elements.push(
-          <h2 key={i} className="text-lg font-bold mt-3 mb-2 ">
-            {line}
+          <h2 key={i} className="text-lg font-bold mt-3 mb-2">
+            {displayLine}
           </h2>
         );
       } else if (line.startsWith("- ")) {

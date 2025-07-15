@@ -21,7 +21,7 @@ import ResumePreview from "./components/ResumePreview";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AuthRedirect from "./components/AuthRedirect";
 import About from "./components/about";
-import ScrollToTop from "./components/ScrollToTop";
+import ScrollToTop from "./ScrollToTop";
 
 function App() {
   return (
