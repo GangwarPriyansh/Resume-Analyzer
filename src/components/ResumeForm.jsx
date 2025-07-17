@@ -118,7 +118,6 @@ export default function ResumeForm() {
           originalData: formData,
         },
       });
-
       toast.success("Resume Generated!");
     } catch (err) {
       toast.error(err.message || "Failed to enhance resume content.");
@@ -296,11 +295,11 @@ export default function ResumeForm() {
                   onClick={handleAddCustomField}
                   className={`${
                     loading || cancle ? "opacity-50 cursor-not-allowed" : ""
-                  } bg-green-600 px-4 py-2 rounded text-white hover:bg-green-700 transition`}
+                  } bg-green-600 px-4 py-2 rounded text-white hover:bg-green-700 transition-all transform hover:-translate-y-0.5 shadow-lg`}
                   disabled={loading || cancle}
                 >
                   <FontAwesomeIcon icon={faPlus} />
-                  <span>Add Section</span>
+                  <span className="font-medium">Add Section</span>
                 </button>
               </div>
 
