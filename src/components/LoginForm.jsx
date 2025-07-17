@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setUser } from "../slice/userSlice";
 import { store } from "../store";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -12,6 +14,8 @@ export default function LoginForm() {
     email: "",
     password: "",
   });
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -75,18 +79,23 @@ export default function LoginForm() {
             />
           </div>
 
-          <div>
+          <div className="relative">
             <label htmlFor="password" className="block mb-1 text-gray-300">
               Password
             </label>
             <input
               id="password"
               name="password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={formData.password}
               onChange={handleChange}
               required
               className="w-full px-4 py-2 rounded bg-[#2b313c] border border-gray-600 text-white"
+            />
+            <FontAwesomeIcon
+              icon={showPassword ? faEyeSlash : faEye}
+              onClick={() => setShowPassword(!showPassword)} 
+              className="absolute right-3 top-[50%] translate-y-[40%] text-gray-400 hover:text-gray-300 cursor-pointer"
             />
           </div>
 

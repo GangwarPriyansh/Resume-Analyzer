@@ -9,6 +9,8 @@ import {
   faTrash,
   faSpinner,
   faRobot,
+  faEye,
+  faEyeSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 
@@ -17,6 +19,7 @@ export default function ResumeAnalyzer() {
   const analysis = useSelector((state) => state.analysis.result);
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
     const savedFileName = sessionStorage.getItem("resumeFileName");
@@ -123,7 +126,7 @@ export default function ResumeAnalyzer() {
               />
             </label>
 
-            {file && (
+            {/* {file && (
               <div className="mt-4 flex items-center justify-between bg-[#2d3748] px-4 py-3 rounded-lg">
                 <div className="flex items-center">
                   <FontAwesomeIcon
@@ -141,6 +144,65 @@ export default function ResumeAnalyzer() {
                   <FontAwesomeIcon icon={faTrash} />
                   <span className="hidden sm:inline">Remove</span>
                 </button>
+              </div>
+            )} */}
+
+            {file && (
+              <div className="mt-4">
+                <div className="flex items-center justify-between bg-[#2d3748] px-4 py-3 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <FontAwesomeIcon
+                      icon={faFileAlt}
+                      className="text-blue-400"
+                    />
+                    <div className="flex flex-col">
+                      <span className="text-gray-300 font-medium truncate max-w-xs">
+                        {file.name}
+                      </span>
+                      {showPreview && (
+                        <div className="mt-1 text-xs text-gray-400">
+                          File size: {Math.round(file.size / 1024)} KB
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setShowPreview(!showPreview)}
+                      className="text-blue-400 hover:text-blue-300 transition-colors p-1"
+                      // title={showPreview ? "Hide details" : "Show details"}
+                    >
+                      <FontAwesomeIcon
+                        icon={showPreview ? faEyeSlash : faEye}
+                      />
+                    </button>
+                    <button
+                      onClick={handleRemoveFile}
+                      className="text-red-400 hover:text-red-300 transition-colors p-1"
+                      title="Remove file"
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                  </div>
+                </div>
+
+                {showPreview &&
+                  file && ( 
+                    <div className="mt-2 bg-[#2d3748] p-4 rounded-lg border border-[#334155]">
+                      {file.type === "application/pdf" ? (
+                        <iframe
+                          src={URL.createObjectURL(file)}
+                          className="w-full h-96"
+                          title="PDF Preview"
+                        />
+                      ) : (
+                        <div className="text-gray-300 p-4">
+                          <FontAwesomeIcon icon={faFileAlt} className="mr-2" />
+                          Preview not available for {file.type}
+                        </div>
+                      )}
+                    </div>
+                  )}
               </div>
             )}
 
