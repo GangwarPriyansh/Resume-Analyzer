@@ -169,8 +169,8 @@ export default function ResumeAnalyzer() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setShowPreview(!showPreview)}
-                      className="text-blue-400 hover:text-blue-300 transition-colors p-1"
-                      // title={showPreview ? "Hide details" : "Show details"}
+                      className="text-gray-400 hover:text-gray-300 transition-colors p-1"
+                      title={showPreview ? "Hide details" : "Show details"}
                     >
                       <FontAwesomeIcon
                         icon={showPreview ? faEyeSlash : faEye}
@@ -186,23 +186,23 @@ export default function ResumeAnalyzer() {
                   </div>
                 </div>
 
-                {showPreview &&
-                  file && ( 
-                    <div className="mt-2 bg-[#2d3748] p-4 rounded-lg border border-[#334155]">
-                      {file.type === "application/pdf" ? (
-                        <iframe
-                          src={URL.createObjectURL(file)}
-                          className="w-full h-96"
-                          title="PDF Preview"
-                        />
-                      ) : (
-                        <div className="text-gray-300 p-4">
-                          <FontAwesomeIcon icon={faFileAlt} className="mr-2" />
-                          Preview not available for {file.type}
-                        </div>
-                      )}
-                    </div>
-                  )}
+                {showPreview && file && (
+                  <div className="mt-2 bg-[#2d3748] p-4 rounded-lg border border-[#334155]">
+                    {file.type === "application/pdf" ? (
+                      // console.log(URL.createObjectURL(file)),
+                      <iframe
+                        src={URL.createObjectURL(file)}
+                        className="w-full h-96"
+                        title="PDF Preview"
+                      />
+                    ) : (
+                      <div className="text-red-300 p-4 flex justify-center items-center">
+                        <FontAwesomeIcon icon={faFileAlt} className="mr-2" />
+                        Preview not available for file
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             )}
 
