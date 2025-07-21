@@ -103,7 +103,7 @@ export default function ResumeForm() {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/improve-resume", {
+      const res = await fetch("http://resume-analyzer-theta-ten.vercel.app/api/improve-resume", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -386,7 +386,7 @@ export default function ResumeForm() {
                     setCancle(true);
                     try {
                       const res = await fetch(
-                        "http://localhost:5000/api/improve-resume",
+                        "http://resume-analyzer-theta-ten.vercel.app/api/improve-resume",
                         {
                           method: "POST",
                           headers: { "Content-Type": "application/json" },

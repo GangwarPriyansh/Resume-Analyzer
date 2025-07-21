@@ -58,7 +58,7 @@ export default function ResumeAnalyzer() {
     dispatch(clearAnalysisResult());
 
     try {
-      const res = await fetch("http://localhost:5000/api/upload/resume", {
+      const res = await fetch("http://resume-analyzer-theta-ten.vercel.app/api/upload/resume", {
         method: "POST",
         body: formData,
       });
