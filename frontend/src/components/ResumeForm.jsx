@@ -103,7 +103,7 @@ export default function ResumeForm() {
     setLoading(true);
 
     try {
-      const res = await fetch("https://resume-analyzer-theta-ten.vercel.app/api/improve-resume", {
+      const res = await fetch("https://resume-analyzer-6lys.onrender.com/api/improve-resume", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -386,7 +386,7 @@ export default function ResumeForm() {
                     setCancle(true);
                     try {
                       const res = await fetch(
-                        "https://resume-analyzer-theta-ten.vercel.app/api/improve-resume",
+                        "https://resume-analyzer-6lys.onrender.com/api/improve-resume",
                         {
                           method: "POST",
                           headers: { "Content-Type": "application/json" },
