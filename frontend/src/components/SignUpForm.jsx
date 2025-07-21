@@ -30,7 +30,7 @@ export default function SignUpForm() {
     }
 
     try {
-      const res = await fetch("http://resume-analyzer-theta-ten.vercel.app/api/users/signup", {
+      const res = await fetch("https://resume-analyzer-theta-ten.vercel.app/api/users/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
