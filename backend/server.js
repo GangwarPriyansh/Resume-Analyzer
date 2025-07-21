@@ -6,9 +6,10 @@ const userRoutes = require("./routes/auth");
 const uploadRoutes = require("./routes/upload");
 // const analyzeRoutes = require("./analyze");
 const improveResume = require("./routes/improveResume");
-
+const path = require('path');
 const app = express();
 dotenv.config();
+
 
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
@@ -22,8 +23,13 @@ app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/uploads", express.static("uploads"));
 app.use("/api/upload", uploadRoutes)
-// app.use("/api/analyze", analyzeRoutes);
 app.use("/api/improve-resume", improveResume);
+
+
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
+app.get(/^(?!\/?api).*/, (_, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+});
 
 // MongoDB Connection
 mongoose
