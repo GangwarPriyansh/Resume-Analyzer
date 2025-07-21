@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearUser } from "../slice/userSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faBars } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ export default function Header() {
 
   const handleLogout = () => {
     dispatch(clearUser());
+    toast.success("Logout successful!");
     navigate("/");
   };
 
@@ -94,9 +96,16 @@ export default function Header() {
           >
             Home
           </button>
-          <a href="#" className="hover:text-blue-400">
+
+          <button
+            onClick={() => {
+              navigate("/about");
+              setShowMobileMenu(false);
+            }}
+            className="hover:text-blue-400 transition-colors"
+          >
             About
-          </a>
+          </button>
 
           {isAuthenticated ? (
             <div className="flex flex-col justify-center">
