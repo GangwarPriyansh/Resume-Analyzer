@@ -22,7 +22,7 @@ export default function Hero() {
   return (
     <section id="hero" className="bg-[#1c2331] text-white">
       {/* Hero Section */}
-      <div className="flex flex-col lg:flex-row md:flex-row items-center justify-between p-8 md:p-12">
+      <div className="flex flex-col lg:flex-row items-center justify-between p-8 md:p-12">
         <img
           src="/images/hero_img (2).png"
           alt="hero image"
@@ -101,7 +101,7 @@ export default function Hero() {
           We provide the tools you need to create a resume that gets noticed by
           employers and recruiters.
         </p>
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {[
             {
               icon: <FontAwesomeIcon icon={faRocket} />,
