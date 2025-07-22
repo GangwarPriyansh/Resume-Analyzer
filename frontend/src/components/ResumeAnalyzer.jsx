@@ -418,7 +418,7 @@ export default function ResumeAnalyzer() {
         errorMessage = "Invalid file type. Please upload a PDF file.";
       }
       
-      toast.error(errorMessage);
+      toast.error(`${errorMessage} - ${err.message}`);
     } finally {
       setLoading(false);
     }
