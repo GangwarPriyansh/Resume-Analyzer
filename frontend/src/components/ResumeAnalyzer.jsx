@@ -297,7 +297,7 @@ export default function ResumeAnalyzer() {
   const [showPreview, setShowPreview] = useState(false);
   const [filePreviewUrl, setFilePreviewUrl] = useState(null);
 
-  // Cleanup on unmount
+  // Clean up object URLs when component unmounts
   useEffect(() => {
     return () => {
       if (filePreviewUrl) {
@@ -306,7 +306,7 @@ export default function ResumeAnalyzer() {
     };
   }, [filePreviewUrl]);
 
-  // Restore file on page refresh
+  // Restore file from session storage
   useEffect(() => {
     const savedFileData = sessionStorage.getItem("resumeFileData");
     if (savedFileData) {
@@ -325,9 +325,12 @@ export default function ResumeAnalyzer() {
     const selected = e.target.files[0];
     if (!selected) return;
 
-    const isPDF = selected.type === "application/pdf" || selected.name.toLowerCase().endsWith(".pdf");
+    // Mobile-friendly file validation
+    const isPDF = selected.type === "application/pdf" || 
+                  selected.name.toLowerCase().endsWith('.pdf');
 
     if (isPDF) {
+      // Check file size (10MB limit)
       if (selected.size > 10 * 1024 * 1024) {
         toast.error("File too large. Please select a PDF under 10MB.");
         return;
@@ -337,7 +340,7 @@ export default function ResumeAnalyzer() {
       const previewUrl = URL.createObjectURL(selected);
       setFilePreviewUrl(previewUrl);
 
-      // Save to session storage
+      // Store file data for session persistence
       const reader = new FileReader();
       reader.onload = (event) => {
         const fileData = {
@@ -352,14 +355,16 @@ export default function ResumeAnalyzer() {
       reader.readAsDataURL(selected);
     } else {
       toast.error("Please upload a valid PDF file.");
-      e.target.value = "";
+      e.target.value = ""; // Reset input to allow re-selection
     }
   };
 
   const handleRemoveFile = () => {
-    if (filePreviewUrl) URL.revokeObjectURL(filePreviewUrl);
+    if (filePreviewUrl) {
+      URL.revokeObjectURL(filePreviewUrl);
+      setFilePreviewUrl(null);
+    }
     setFile(null);
-    setFilePreviewUrl(null);
     dispatch(clearAnalysisResult());
     sessionStorage.removeItem("resumeFileData");
     document.getElementById("resumeUpload").value = "";
@@ -378,9 +383,20 @@ export default function ResumeAnalyzer() {
     dispatch(clearAnalysisResult());
 
     try {
+      // Mobile-specific headers
+      const headers = {
+        'Accept': 'application/json',
+      };
+
+      // iOS devices might need explicit Content-Type
+      if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+        headers['Content-Type'] = 'multipart/form-data';
+      }
+
       const res = await fetch("https://resume-analyzer-6lys.onrender.com/api/upload/resume", {
         method: "POST",
         body: formData,
+        headers,
       });
 
       const data = await res.json();
@@ -393,11 +409,16 @@ export default function ResumeAnalyzer() {
       dispatch(setAnalysisResult(data.analysis));
     } catch (err) {
       console.error("Upload/AI Error:", err);
-      toast.error(
-        err.message.includes("Failed to fetch")
-          ? "Network error. Please check your connection or use Wi-Fi."
-          : `Upload failed: ${err.message}`
-      );
+      
+      // Mobile-specific error messages
+      let errorMessage = "Server error. Try again later.";
+      if (err.message.includes("file size")) {
+        errorMessage = "File too large. Please upload a smaller PDF (max 10MB).";
+      } else if (err.message.includes("PDF") || err.message.includes("file type")) {
+        errorMessage = "Invalid file type. Please upload a PDF file.";
+      }
+      
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -428,17 +449,17 @@ export default function ResumeAnalyzer() {
               htmlFor="resumeUpload"
               className="border-2 border-dashed border-[#3a4556] rounded-xl flex flex-col items-center justify-center h-48 cursor-pointer hover:bg-[#2d3748] transition-all group"
             >
-              <div className="bg-blue-600/20 p-4 rounded-full mb-3 group-hover:bg-blue-600/30">
+              <div className="bg-blue-600/20 p-4 rounded-full mb-3 group-hover:bg-blue-600/30 transition-all">
                 <FontAwesomeIcon
                   icon={faCloudUploadAlt}
                   size="2x"
-                  className="text-blue-400 group-hover:text-blue-300"
+                  className="text-blue-400 group-hover:text-blue-300 transition-colors"
                 />
               </div>
-              <p className="text-gray-400 group-hover:text-white">
+              <p className="text-gray-400 group-hover:text-white transition-colors">
                 {file ? "Replace PDF file" : "Upload your resume"}
               </p>
-              <p className="text-sm text-gray-500 mt-1 group-hover:text-gray-400">
+              <p className="text-sm text-gray-500 mt-1 group-hover:text-gray-400 transition-colors">
                 (Only PDF accepted, max 10MB)
               </p>
               <input
@@ -469,14 +490,14 @@ export default function ResumeAnalyzer() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setShowPreview(!showPreview)}
-                      className="text-gray-400 hover:text-gray-300 p-1"
+                      className="text-gray-400 hover:text-gray-300 transition-colors p-1"
                       title={showPreview ? "Hide details" : "Show details"}
                     >
                       <FontAwesomeIcon icon={showPreview ? faEyeSlash : faEye} />
                     </button>
                     <button
                       onClick={handleRemoveFile}
-                      className="text-red-400 hover:text-red-300 p-1"
+                      className="text-red-400 hover:text-red-300 transition-colors p-1"
                       title="Remove file"
                     >
                       <FontAwesomeIcon icon={faTrash} />
@@ -486,22 +507,11 @@ export default function ResumeAnalyzer() {
 
                 {showPreview && filePreviewUrl && (
                   <div className="mt-2 bg-[#2d3748] p-4 rounded-lg border border-[#334155]">
-                    {/(iPhone|iPad|iPod|Android)/i.test(navigator.userAgent) ? (
-                      <a
-                        href={filePreviewUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-400 underline text-sm"
-                      >
-                        Open PDF in new tab
-                      </a>
-                    ) : (
-                      <iframe
-                        src={filePreviewUrl}
-                        className="w-full h-96"
-                        title="PDF Preview"
-                      />
-                    )}
+                    <iframe
+                      src={filePreviewUrl}
+                      className="w-full h-96"
+                      title="PDF Preview"
+                    />
                   </div>
                 )}
               </div>
@@ -512,9 +522,9 @@ export default function ResumeAnalyzer() {
                 onClick={handleSubmit}
                 disabled={loading || !file}
                 className={`w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 px-6 rounded-lg 
-                            hover:from-blue-700 hover:to-blue-800 transition-all transform hover:-translate-y-0.5
-                            shadow-lg flex items-center justify-center gap-2
-                            ${!file || loading ? "opacity-70 cursor-not-allowed" : ""}`}
+                          hover:from-blue-700 hover:to-blue-800 transition-all transform hover:-translate-y-0.5
+                          shadow-lg flex items-center justify-center gap-2
+                          ${!file || loading ? "opacity-70 cursor-not-allowed" : ""}`}
               >
                 {loading ? (
                   <>
@@ -538,7 +548,9 @@ export default function ResumeAnalyzer() {
               <div className="mr-3">
                 <FontAwesomeIcon icon={faRobot} className="text-blue-400 text-2xl" />
               </div>
-              <h3 className="text-2xl font-bold text-white">AI Analysis Results</h3>
+              <h3 className="text-2xl font-bold text-white">
+                AI Analysis Results
+              </h3>
             </div>
             <div
               className="prose prose-invert max-w-none text-gray-200"
