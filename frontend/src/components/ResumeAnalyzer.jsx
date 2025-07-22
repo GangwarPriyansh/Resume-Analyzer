@@ -461,7 +461,7 @@ export default function ResumeAnalyzer() {
 
             {file && (
               <div className="mt-4">
-                <div className="flex items-center justify-between bg-[#2d3748] px-4 py-3 rounded-lg">
+                {/* <div className="flex items-center justify-between bg-[#2d3748] px-4 py-3 rounded-lg">
                   <div className="flex items-center gap-3">
                     <FontAwesomeIcon
                       icon={faFileAlt}
@@ -479,6 +479,42 @@ export default function ResumeAnalyzer() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setShowPreview(!showPreview)}
+                      className="text-gray-400 hover:text-gray-300 p-1"
+                      title={showPreview ? "Hide details" : "Show details"}
+                    >
+                      <FontAwesomeIcon
+                        icon={showPreview ? faEyeSlash : faEye}
+                      />
+                    </button>
+                    <button
+                      onClick={handleRemoveFile}
+                      className="text-red-400 hover:text-red-300 p-1"
+                      title="Remove file"
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                  </div>
+                </div> */}
+                <div className="flex items-center justify-between bg-[#2d3748] px-4 py-3 rounded-lg flex-nowrap min-w-0">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <FontAwesomeIcon
+                      icon={faFileAlt}
+                      className="text-blue-400 flex-shrink-0"
+                    />
+                    <div className="flex flex-col min-w-0">
+                      <span className="text-gray-300 font-medium truncate max-w-[120px] sm:max-w-xs">
+                        {file.name}
+                      </span>
+                      {showPreview && (
+                        <div className="mt-1 text-xs text-gray-400">
+                          File size: {Math.round(file.size / 1024)} KB
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 flex-shrink-0">
                     <button
                       onClick={() => setShowPreview(!showPreview)}
                       className="text-gray-400 hover:text-gray-300 p-1"
