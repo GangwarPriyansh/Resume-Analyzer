@@ -507,7 +507,7 @@ export default function ResumeAnalyzer() {
                         rel="noopener noreferrer"
                         className="text-blue-400 underline text-sm"
                       >
-                        Open PDF in new tab
+                        View your uploaded PDF
                       </a>
                     ) : (
                       <iframe
