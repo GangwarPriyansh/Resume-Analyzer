@@ -458,7 +458,7 @@ import {
   clearFormData,
   addCustomField,
   deleteCustomField,
-  setFormData,
+  // setFormData, // Removed as we are no longer fetching full resume data
 } from "../slice/resumeformSlice";
 
 export default function ResumeForm() {
@@ -468,7 +468,7 @@ export default function ResumeForm() {
   const [loading, setLoading] = useState(false);
   const [cancle, setCancle] = useState(false);
   const [customFieldName, setCustomFieldName] = useState("");
-  const [initialResumeDataLoaded, setInitialResumeDataLoaded] = useState(false); // New state to manage resume-specific data fetching
+  // const [initialResumeDataLoaded, setInitialResumeDataLoaded] = useState(false); // Removed
 
   // Get formData from resumeForm slice
   const formData = useSelector((state) => state.resumeForm.formData);
@@ -492,21 +492,10 @@ export default function ResumeForm() {
     { field: "achievements", label: "Achievements", icon: faTrophy },
   ];
 
-  // Effect to pre-fill basic user data and then fetch existing resume data
+  // Effect to pre-fill basic user data from Redux
   useEffect(() => {
-    // 1. Pre-fill basic user data from Redux if available
     if (user) {
-      // Create a temporary object for basic user data to dispatch
-      const basicUserData = {
-        name: user.name || "",
-        email: user.email || "",
-        contact: user.number || "", // Use 'number' from user slice for 'contact' field
-      };
-      // Dispatch only the basic fields, so other formData fields remain if already present
-      // or are initialized to empty strings if not covered here.
-      dispatch(updateField(basicUserData)); // Dispatch basic fields
-      // For `updateField` to work with multiple fields, you might need to modify it
-      // or dispatch individual updates:
+      // Dispatch individual updates for name, email, and contact (number)
       if (user.name) dispatch(updateField({ name: "name", value: user.name }));
       if (user.email) dispatch(updateField({ name: "email", value: user.email }));
       if (user.number) dispatch(updateField({ name: "contact", value: user.number }));
@@ -518,58 +507,16 @@ export default function ResumeForm() {
         if (textareasRef.current.contact) autoResize(textareasRef.current.contact);
       }, 0);
     }
+    // Dependency array: only re-run if 'user' object changes
+    // We don't need 'token' here as we're not fetching anything authenticated.
+  }, [dispatch, user]);
 
-    // 2. Fetch existing resume-specific data (summary, education, skills, etc.)
-    const fetchResumeSpecificData = async () => {
-      // Only fetch if not already loaded and user is authenticated
-      if (initialResumeDataLoaded || !user) return;
-
-      setLoading(true);
-      try {
-        // This endpoint should fetch the *full* resume data for the *current user*.
-        // It should ideally be authenticated.
-        const res = await fetch(
-          "https://resume-analyzer-6lys.onrender.com/api/user-resume-data", // New endpoint for specific resume data
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`, // Include the token for authentication
-            },
-          }
-        );
-
-        if (!res.ok) {
-          // If no resume data is found, it's not an error, just no existing resume
-          if (res.status === 404) {
-            toast.info("No existing resume data found. Please fill out the form.");
-            return;
-          }
-          throw new Error(`Failed to fetch resume data: ${res.statusText}`);
-        }
-
-        const resumeData = await res.json();
-        // Dispatch action to set the fetched resume data in the Redux store
-        // We use `setFormData` here because this data should replace or augment the
-        // current `formData` from the backend.
-        dispatch(setFormData(resumeData));
-        setInitialResumeDataLoaded(true); // Mark resume data as loaded
-        toast.success("Existing resume data loaded!");
-      } catch (err) {
-        toast.error(err.message || "Failed to load existing resume data.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchResumeSpecificData();
-  }, [dispatch, user, token]); // Depend on user and token for fetching authenticated data
-
-  // Effect for auto-resizing textareas
+  // Effect for auto-resizing textareas (remains the same)
   useEffect(() => {
     Object.values(textareasRef.current).forEach((textarea) => {
       if (textarea) autoResize(textarea);
     });
-  }, [formData]); // Re-run when formData changes to adjust for fetched data
+  }, [formData]);
 
   const autoResize = (el) => {
     if (el) {
@@ -625,7 +572,7 @@ export default function ResumeForm() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Send token for AI processing
+            Authorization: `Bearer ${token}`, // Still send token for AI processing
           },
           body: JSON.stringify(formData),
         }
@@ -654,7 +601,10 @@ export default function ResumeForm() {
     if (!trimmedName) return toast.error("Section name can't be empty.");
     const fieldKey = trimmedName.toLowerCase().replace(/\s+/g, "_");
 
-    if (formData[fieldKey]) return toast.error("Section already exists.");
+    // Check if the field already exists in formData or customFields to prevent duplicates
+    if (formData[fieldKey] !== undefined || customFields.some(f => f.field === fieldKey)) {
+        return toast.error("Section with this name already exists.");
+    }
 
     dispatch(addCustomField({ field: fieldKey, label: trimmedName }));
     setCustomFieldName("");
@@ -664,6 +614,7 @@ export default function ResumeForm() {
       if (el) autoResize(el);
     }, 0);
   };
+
 
   const handleDeleteCustomField = (fieldKey) => {
     dispatch(deleteCustomField(fieldKey));
@@ -853,7 +804,14 @@ export default function ResumeForm() {
                   type="button"
                   onClick={() => {
                     dispatch(clearFormData());
+                    // After clearing, re-apply the pre-filled user data
+                    // This ensures name, email, contact are always pre-filled after clearing
                     setTimeout(() => {
+                        if (user) {
+                            if (user.name) dispatch(updateField({ name: "name", value: user.name }));
+                            if (user.email) dispatch(updateField({ name: "email", value: user.email }));
+                            if (user.number) dispatch(updateField({ name: "contact", value: user.number }));
+                        }
                       Object.values(textareasRef.current).forEach(
                         (textarea) => {
                           if (textarea) {
@@ -900,7 +858,7 @@ export default function ResumeForm() {
                     );
 
                     if (!allRequiredFilled) {
-                      navigate("/");
+                      navigate("/"); // Navigate home if not all required fields are filled
                       return;
                     }
 
