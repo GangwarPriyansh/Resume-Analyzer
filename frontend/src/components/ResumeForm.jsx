@@ -458,7 +458,6 @@ import {
   clearFormData,
   addCustomField,
   deleteCustomField,
-  setFormData,
 } from "../slice/resumeformSlice";
 
 export default function ResumeForm() {
