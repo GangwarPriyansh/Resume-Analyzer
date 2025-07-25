@@ -42,7 +42,12 @@ const resumeFormSlice = createSlice({
         state.formData[key] = "";
       });
       state.customFields = [];
-    }
+    },
+     setFormData: (state, action) => { // This reducer sets the entire formData
+      state.formData = { ...state.formData, ...action.payload };
+      // Optionally, you might want to handle customFields received from the backend here as well
+      // if your backend sends them as part of the resume data.
+    },
   },
 });
 
@@ -50,7 +55,8 @@ export const {
   updateField,
   addCustomField,
   deleteCustomField,
-  clearFormData
+  clearFormData,
+  setFormData,
 } = resumeFormSlice.actions;
 
 export default resumeFormSlice.reducer;
