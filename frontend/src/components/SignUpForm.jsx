@@ -10,10 +10,11 @@ export default function SignUpForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    name: user?.name || "",
+    email: user?.email || "",
+    number: user?.number || "",
+    password: user?.password || "",
+    confirmPassword: user?.confirmPassword || "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -30,13 +31,16 @@ export default function SignUpForm() {
     }
 
     try {
-      const res = await fetch("https://resume-analyzer-6lys.onrender.com/api/users/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const res = await fetch(
+        "https://resume-analyzer-6lys.onrender.com/api/users/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       const data = await res.json();
 
@@ -48,6 +52,7 @@ export default function SignUpForm() {
             user: {
               name: formData.name,
               email: formData.email,
+              number: formData.number,
             },
             token: data.token,
             isAuthenticated: true,
@@ -95,6 +100,22 @@ export default function SignUpForm() {
               value={formData.email}
               onChange={handleChange}
               required
+              className="w-full px-4 py-2 rounded bg-[#2b313c] border border-gray-600 text-white"
+            />
+          </div>
+          <div>
+            <label htmlFor="number" className="block mb-1 text-gray-300">
+              Number
+            </label>
+            <input
+              id="number"
+              name="number"
+              type="number"
+              value={formData.number}
+              onChange={handleChange}
+              required
+              pattern="[0-9]{10,15}"
+              title="Please enter a valid phone number"
               className="w-full px-4 py-2 rounded bg-[#2b313c] border border-gray-600 text-white"
             />
           </div>
