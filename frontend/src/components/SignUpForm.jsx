@@ -186,8 +186,6 @@
 //   );
 // }
 
-
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -307,7 +305,6 @@ export default function SignUpForm() {
             <input
               id="number"
               name="number"
-              type="number"
               value={formData.number}
               onChange={handleChange}
               required
@@ -338,7 +335,10 @@ export default function SignUpForm() {
           </div>
 
           <div className="relative">
-            <label htmlFor="confirmPassword" className="block mb-1 text-gray-300">
+            <label
+              htmlFor="confirmPassword"
+              className="block mb-1 text-gray-300"
+            >
               Confirm Password
             </label>
             <input
