@@ -48,13 +48,25 @@ export default function Hero() {
 
           <div className="flex flex-wrap justify-center lg:justify-start gap-4">
             <button
-              onClick={() => navigate("/resume-builder")}
+              onClick={() => {
+                if (isAuthenticated) {
+                  navigate("/resume-builder");
+                } else {
+                  navigate("/login");
+                }
+              }}
               className="bg-white text-black px-6 py-3 rounded-lg hover:bg-gray-200 transition transform hover:-translate-y-1 hover:shadow-lg font-medium"
             >
               Resume Builder
             </button>
             <button
-              onClick={() => navigate("/resume-analyzer")}
+              onClick={() => {
+                if (isAuthenticated) {
+                  navigate("/resume-analyzer");
+                } else {
+                  navigate("/login");
+                }
+              }}
               className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition transform hover:-translate-y-1 hover:shadow-lg font-medium"
             >
               Resume Analyzer
