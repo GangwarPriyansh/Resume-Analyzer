@@ -146,102 +146,145 @@ export default function ResumeAnalyzer() {
     if (!content) return "";
 
     // Clean up content and remove ALL asterisks
-    const cleanContent = content.replace(/\*+/g, '');
-    
+    const cleanContent = content.replace(/\*+/g, "");
+
     // Split content into sections
     const sections = cleanContent.split(/(?=\d+\.\s)/);
-    
-    return sections.map((section, index) => {
-      if (!section.trim()) return null;
 
-      // Check if this is a main section (starts with number)
-      const isMainSection = /^\d+\.\s/.test(section.trim());
-      
-      if (isMainSection) {
-        const lines = section.trim().split('\n');
-        let title = lines[0].replace(/^\d+\.\s/, '').trim();
-        const contentLines = lines.slice(1);
+    return sections
+      .map((section, index) => {
+        if (!section.trim()) return null;
 
-        // Determine section type based on keywords
-        const getSectionType = (title) => {
-          const titleLower = title.toLowerCase();
-          if (titleLower.includes('missing') || titleLower.includes('lack')) {
-            return { icon: faExclamationTriangle, color: 'text-red-400', bgColor: 'bg-red-500/10', borderColor: 'border-red-500/20' };
-          } else if (titleLower.includes('improvement') || titleLower.includes('enhance')) {
-            return { icon: faArrowUp, color: 'text-yellow-400', bgColor: 'bg-yellow-500/10', borderColor: 'border-yellow-500/20' };
-          } else if (titleLower.includes('suggestion') || titleLower.includes('recommend')) {
-            return { icon: faLightbulb, color: 'text-blue-400', bgColor: 'bg-blue-500/10', borderColor: 'border-blue-500/20' };
-          } else {
-            return { icon: faCheckCircle, color: 'text-green-400', bgColor: 'bg-green-500/10', borderColor: 'border-green-500/20' };
-          }
-        };
+        // Check if this is a main section (starts with number)
+        const isMainSection = /^\d+\.\s/.test(section.trim());
 
-        const sectionType = getSectionType(title);
+        if (isMainSection) {
+          const lines = section.trim().split("\n");
+          let title = lines[0].replace(/^\d+\.\s/, "").trim();
+          const contentLines = lines.slice(1);
 
-        // Process content to identify headings and regular content
-        const processedContent = [];
-        
-        contentLines.forEach(line => {
-          const trimmedLine = line.trim();
-          if (!trimmedLine) return;
+          // Determine section type based on keywords
+          const getSectionType = (title) => {
+            const titleLower = title.toLowerCase();
+            if (titleLower.includes("missing") || titleLower.includes("lack")) {
+              return {
+                icon: faExclamationTriangle,
+                color: "text-red-400",
+                bgColor: "bg-red-500/10",
+                borderColor: "border-red-500/20",
+              };
+            } else if (
+              titleLower.includes("improvement") ||
+              titleLower.includes("enhance")
+            ) {
+              return {
+                icon: faArrowUp,
+                color: "text-yellow-400",
+                bgColor: "bg-yellow-500/10",
+                borderColor: "border-yellow-500/20",
+              };
+            } else if (
+              titleLower.includes("suggestion") ||
+              titleLower.includes("recommend")
+            ) {
+              return {
+                icon: faLightbulb,
+                color: "text-blue-400",
+                bgColor: "bg-blue-500/10",
+                borderColor: "border-blue-500/20",
+              };
+            } else {
+              return {
+                icon: faCheckCircle,
+                color: "text-green-400",
+                bgColor: "bg-green-500/10",
+                borderColor: "border-green-500/20",
+              };
+            }
+          };
 
-          // Check if this line looks like a heading (ends with colon or starts with capital letter and is short)
-          const isHeading = trimmedLine.endsWith(':') || 
-                          (/^[A-Z][^.]*:/.test(trimmedLine)) ||
-                          (/^[A-Z\s]+:$/.test(trimmedLine));
+          const sectionType = getSectionType(title);
 
-          if (isHeading) {
-            // This is a heading
-            const headingText = trimmedLine.replace(':', '');
-            processedContent.push({ 
-              type: 'heading', 
-              content: headingText 
-            });
-          } else {
-            // This is regular content
-            const cleanText = trimmedLine.replace(/^[\*\-]\s*/, '');
-            processedContent.push({ 
-              type: 'content', 
-              content: cleanText 
-            });
-          }
-        });
+          // Process content to identify headings and regular content
+          const processedContent = [];
 
-        return (
-          <div key={index} className={`${sectionType.bgColor} ${sectionType.borderColor} border rounded-xl p-3 sm:p-4 md:p-6 mb-3 sm:mb-4 md:mb-6 backdrop-blur-sm`}>
-            <div className="flex items-start gap-2 sm:gap-3 md:gap-4">
-              <div className={`${sectionType.color} mt-1 flex-shrink-0`}>
-                <FontAwesomeIcon icon={sectionType.icon} className="text-sm sm:text-base md:text-lg" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <h4 className={`text-sm sm:text-base md:text-lg lg:text-xl font-bold ${sectionType.color} mb-2 sm:mb-3`}>
-                  {title}
-                </h4>
-                <div className="space-y-2 sm:space-y-3">
-                  {processedContent.map((item, itemIndex) => {
-                    if (item.type === 'heading') {
-                      return (
-                        <h5 key={itemIndex} className="font-bold text-white text-xs sm:text-sm md:text-base bg-gray-700/30 px-2 py-1 rounded border-l-4 border-blue-400 mt-3 first:mt-0">
-                          {item.content}
-                        </h5>
-                      );
-                    } else {
-                      return (
-                        <div key={itemIndex} className="text-gray-300 text-xs sm:text-sm md:text-base leading-relaxed pl-4">
-                          {item.content}
-                        </div>
-                      );
-                    }
-                  })}
+          contentLines.forEach((line) => {
+            const trimmedLine = line.trim();
+            if (!trimmedLine) return;
+
+            // Check if this line looks like a heading (ends with colon or starts with capital letter and is short)
+            const isHeading =
+              trimmedLine.endsWith(":") ||
+              /^[A-Z][^.]*:/.test(trimmedLine) ||
+              /^[A-Z\s]+:$/.test(trimmedLine);
+
+            if (isHeading) {
+              // This is a heading
+              const headingText = trimmedLine.replace(":", "");
+              processedContent.push({
+                type: "heading",
+                content: headingText,
+              });
+            } else {
+              // This is regular content
+              const cleanText = trimmedLine.replace(/^[\*\-]\s*/, "");
+              processedContent.push({
+                type: "content",
+                content: cleanText,
+              });
+            }
+          });
+
+          return (
+            <div
+              key={index}
+              className={`${sectionType.bgColor} ${sectionType.borderColor} border rounded-xl p-3 sm:p-4 md:p-6 mb-3 sm:mb-4 md:mb-6 backdrop-blur-sm`}
+            >
+              <div className="flex items-start gap-2 sm:gap-3 md:gap-4">
+                <div className={`${sectionType.color} mt-1 flex-shrink-0`}>
+                  <FontAwesomeIcon
+                    icon={sectionType.icon}
+                    className="text-sm sm:text-base md:text-lg"
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h4
+                    className={`text-sm sm:text-base md:text-lg lg:text-xl font-bold ${sectionType.color} mb-2 sm:mb-3`}
+                  >
+                    {title}
+                  </h4>
+                  <div className="space-y-2 sm:space-y-3">
+                    {processedContent.map((item, itemIndex) => {
+                      if (item.type === "heading") {
+                        return (
+                          <h5
+                            key={itemIndex}
+                            className="font-bold text-white text-xs sm:text-sm md:text-base bg-gray-700/30 px-2 py-1 rounded border-l-4 border-blue-400 mt-3 first:mt-0"
+                          >
+                            {item.content}
+                          </h5>
+                        );
+                      } else {
+                        return (
+                          <div
+                            key={itemIndex}
+                            className="text-gray-300 text-xs sm:text-sm md:text-base leading-relaxed pl-4"
+                          >
+                            {item.content}
+                          </div>
+                        );
+                      }
+                    })}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        );
-      }
+          );
+        }
 
-      return null;
-    }).filter(Boolean);
+        return null;
+      })
+      .filter(Boolean);
   };
 
   return (
@@ -409,19 +452,43 @@ export default function ResumeAnalyzer() {
 
             {/* Content Section */}
             <div className="bg-[#1e293b] p-6 sm:p-8 rounded-b-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] border-b border-x border-[#334155]">
-              <div className="space-y-6">
-                {formatAnalysisContent(analysis)}
-              </div>
-              
+              <div className="space-y-6">{formatAnalysisContent(analysis)}</div>
+
               {/* Summary Footer */}
-              <div className="mt-8 pt-6 border-t border-[#334155]">
+              {/* <div className="mt-8 pt-6 border-t border-[#334155]">
                 <div className="bg-gradient-to-r from-blue-500/10 to-purple-600/10 border border-blue-500/20 rounded-lg p-4">
                   <div className="flex items-center gap-3 mb-2">
-                    <FontAwesomeIcon icon={faLightbulb} className="text-yellow-400" />
-                    <span className="font-semibold text-yellow-400">Pro Tip</span>
+                    <FontAwesomeIcon
+                      icon={faLightbulb}
+                      className="text-yellow-400"
+                    />
+                    <span className="font-extrabold text-xl text-yellow-400">
+                      Pro Tip
+                    </span>
                   </div>
                   <p className="text-gray-300 text-base">
-                    Focus on implementing the missing skills and improving the highlighted sections to significantly boost your resume's impact.
+                    Focus on implementing the missing skills and improving the
+                    highlighted sections to significantly boost your resume's
+                    impact.
+                  </p>
+                </div>
+              </div> */}
+
+              <div className="mt-8 pt-6 border-t border-[#334155]">
+                <div className="bg-gradient-to-r from-blue-500/10 to-purple-600/10 border border-blue-500/20 rounded-lg p-4 sm:p-5">
+                  <div className="flex items-center gap-3 mb-2 sm:mb-3">
+                    <FontAwesomeIcon
+                      icon={faLightbulb}
+                      className="text-yellow-400 text-lg sm:text-xl"
+                    />
+                    <span className="font-extrabold text-xl sm:text-2xl md:text-3xl text-yellow-400">
+                      Pro Tip
+                    </span>
+                  </div>
+                  <p className="text-gray-300 text-base sm:text-lg">
+                    Focus on implementing the missing skills and improving the
+                    highlighted sections to significantly boost your resume's
+                    impact.
                   </p>
                 </div>
               </div>
