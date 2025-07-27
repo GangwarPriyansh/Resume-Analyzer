@@ -43,10 +43,8 @@ const resumeFormSlice = createSlice({
       });
       state.customFields = [];
     },
-     setFormData: (state, action) => { // This reducer sets the entire formData
+     setFormData: (state, action) => { 
       state.formData = { ...state.formData, ...action.payload };
-      // Optionally, you might want to handle customFields received from the backend here as well
-      // if your backend sends them as part of the resume data.
     },
   },
 });

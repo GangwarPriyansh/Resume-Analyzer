@@ -458,7 +458,6 @@ import {
   clearFormData,
   addCustomField,
   deleteCustomField,
-  // setFormData, // Removed as we are no longer fetching full resume data
 } from "../slice/resumeformSlice";
 
 export default function ResumeForm() {
@@ -468,15 +467,14 @@ export default function ResumeForm() {
   const [loading, setLoading] = useState(false);
   const [cancle, setCancle] = useState(false);
   const [customFieldName, setCustomFieldName] = useState("");
-  // const [initialResumeDataLoaded, setInitialResumeDataLoaded] = useState(false); // Removed
 
   // Get formData from resumeForm slice
   const formData = useSelector((state) => state.resumeForm.formData);
   const customFields = useSelector((state) => state.resumeForm.customFields);
 
   // Get user info from userSlice
-  const user = useSelector((state) => state.user.user); // Assuming user data is under 'user.user'
-  const token = useSelector((state) => state.user.token); // Assuming token is under 'user.token'
+  const user = useSelector((state) => state.user.user); 
+  const token = useSelector((state) => state.user.token); 
 
   const fields = [
     { field: "name", label: "Full Name", icon: faUser },
@@ -492,12 +490,10 @@ export default function ResumeForm() {
     { field: "achievements", label: "Achievements", icon: faTrophy },
   ];
 
-  // Effect to pre-fill basic user data from Redux
   useEffect(() => {
     if (user) {
       console.log("Pre-filling user data:", user);
       console.log(user.name, user.email, user.number);
-      // Dispatch individual updates for name, email, and contact (number)
       if (user.name) dispatch(updateField({ name: "name", value: user.name }));
       if (user.email) dispatch(updateField({ name: "email", value: user.email }));
       if (user.number) dispatch(updateField({ name: "contact", value: user.number }));
@@ -509,11 +505,8 @@ export default function ResumeForm() {
         if (textareasRef.current.contact) autoResize(textareasRef.current.contact);
       }, 0);
     }
-    // Dependency array: only re-run if 'user' object changes
-    // We don't need 'token' here as we're not fetching anything authenticated.
   }, [dispatch, user]);
 
-  // Effect for auto-resizing textareas (remains the same)
   useEffect(() => {
     Object.values(textareasRef.current).forEach((textarea) => {
       if (textarea) autoResize(textarea);
@@ -574,7 +567,7 @@ export default function ResumeForm() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Still send token for AI processing
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(formData),
         }
@@ -603,7 +596,6 @@ export default function ResumeForm() {
     if (!trimmedName) return toast.error("Section name can't be empty.");
     const fieldKey = trimmedName.toLowerCase().replace(/\s+/g, "_");
 
-    // Check if the field already exists in formData or customFields to prevent duplicates
     if (formData[fieldKey] !== undefined || customFields.some(f => f.field === fieldKey)) {
         return toast.error("Section with this name already exists.");
     }
@@ -806,8 +798,6 @@ export default function ResumeForm() {
                   type="button"
                   onClick={() => {
                     dispatch(clearFormData());
-                    // After clearing, re-apply the pre-filled user data
-                    // This ensures name, email, contact are always pre-filled after clearing
                     setTimeout(() => {
                         if (user) {
                             if (user.name) dispatch(updateField({ name: "name", value: user.name }));
