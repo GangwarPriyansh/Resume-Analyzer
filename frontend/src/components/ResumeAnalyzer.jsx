@@ -496,92 +496,87 @@ export default function ResumeAnalyzer() {
   const formatAnalysisContent = (content) => {
     if (!content) return "";
 
-    // Split content into sections
-    const sections = content.split(/(?=\d+\.\s)/);
-    
-    return sections.map((section, index) => {
-      if (!section.trim()) return null;
+    const lines = content.split("\n").filter((line) => line.trim() !== "");
 
-      // Check if this is a main section (starts with number)
-      const isMainSection = /^\d+\.\s/.test(section.trim());
-      
-      if (isMainSection) {
-        const lines = section.trim().split('\n');
-        const title = lines[0].replace(/^\d+\.\s/, '');
-        const content = lines.slice(1).join('\n');
+    let result = [];
+    let currentSection = null;
+    let currentSubsection = null;
 
-        // Determine section type based on keywords
-        const getSectionType = (title) => {
-          const titleLower = title.toLowerCase();
-          if (titleLower.includes('missing') || titleLower.includes('lack')) {
-            return { icon: faExclamationTriangle, color: 'text-red-400', bgColor: 'bg-red-500/10', borderColor: 'border-red-500/20' };
-          } else if (titleLower.includes('improvement') || titleLower.includes('enhance')) {
-            return { icon: faArrowUp, color: 'text-yellow-400', bgColor: 'bg-yellow-500/10', borderColor: 'border-yellow-500/20' };
-          } else if (titleLower.includes('suggestion') || titleLower.includes('recommend')) {
-            return { icon: faLightbulb, color: 'text-blue-400', bgColor: 'bg-blue-500/10', borderColor: 'border-blue-500/20' };
-          } else {
-            return { icon: faCheckCircle, color: 'text-green-400', bgColor: 'bg-green-500/10', borderColor: 'border-green-500/20' };
-          }
+    lines.forEach((line, index) => {
+      line = line.trim();
+
+      // Bold Markdown heading (**Heading**)
+      const headingMatch = line.match(/^\*\*(.+?)\*\*$/);
+      if (headingMatch) {
+        result.push(
+          <h3
+            key={`heading-${index}`}
+            className="text-xl font-bold text-yellow-400 mt-6 mb-3"
+          >
+            {headingMatch[1]}
+          </h3>
+        );
+        currentSection = null;
+        currentSubsection = null;
+        return;
+      }
+
+      // Subsection like SKILLS: or EXPERIENCE:
+      const subsectionMatch = line.match(/^([A-Z ]+):$/);
+      if (subsectionMatch) {
+        currentSubsection = {
+          title: subsectionMatch[1],
+          items: [],
         };
+        result.push(
+          <div key={`subsection-${index}`} className="mt-4">
+            <h4 className="text-lg font-semibold text-white mb-2">
+              {currentSubsection.title}
+            </h4>
+          </div>
+        );
+        return;
+      }
 
-        const sectionType = getSectionType(title);
+      // Bullet point
+      if (line.startsWith("*")) {
+        const bulletText = line.replace(/^\*\s*/, "");
 
-        return (
-          <div key={index} className={`${sectionType.bgColor} ${sectionType.borderColor} border rounded-xl p-6 mb-6 backdrop-blur-sm`}>
-            <div className="flex items-start gap-4">
-              <div className={`${sectionType.color} mt-1`}>
-                <FontAwesomeIcon icon={sectionType.icon} className="text-lg" />
-              </div>
-              <div className="flex-1">
-                <h4 className={`text-lg font-semibold ${sectionType.color} mb-3`}>
-                  {title}
-                </h4>
-                <div className="space-y-2">
-                  {content.split('\n').map((line, lineIndex) => {
-                    if (!line.trim()) return null;
-                    
-                    // Format bullet points
-                    if (line.trim().startsWith('*')) {
-                      const text = line.replace(/^\*\s*/, '');
-                      
-                      // Remove all markdown formatting (asterisks)
-                      const formattedText = text.replace(/\*+/g, '');
-                      const parts = formattedText.split(':');
-                      
-                      return (
-                        <div key={lineIndex} className="flex items-start gap-3 text-gray-300">
-                          <div className={`${sectionType.color} mt-1.5`}>
-                            <div className="w-1.5 h-1.5 rounded-full bg-current"></div>
-                          </div>
-                          <div className="flex-1">
-                            {parts.length > 1 ? (
-                              <>
-                                <span className="font-bold text-white">{parts[0]}:</span>
-                                <span className="ml-1">{parts.slice(1).join(':')}</span>
-                              </>
-                            ) : (
-                              <span className="font-medium">{formattedText}</span>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    }
-                    
-                    return (
-                      <p key={lineIndex} className="text-gray-300 leading-relaxed">
-                        {line.trim()}
-                      </p>
-                    );
-                  })}
-                </div>
-              </div>
+        const parts = bulletText.split(":");
+        const bulletElement = (
+          <div
+            key={`bullet-${index}`}
+            className="flex items-start gap-3 text-gray-300 mb-1"
+          >
+            <div className="text-yellow-400 mt-1.5">
+              <div className="w-1.5 h-1.5 rounded-full bg-current"></div>
+            </div>
+            <div className="flex-1">
+              {parts.length > 1 ? (
+                <>
+                  <span className="font-bold text-white">{parts[0]}:</span>
+                  <span className="ml-1">{parts.slice(1).join(":")}</span>
+                </>
+              ) : (
+                <span className="font-medium">{bulletText}</span>
+              )}
             </div>
           </div>
         );
+
+        result.push(bulletElement);
+        return;
       }
 
-      return null;
-    }).filter(Boolean);
+      // Normal paragraph fallback
+      result.push(
+        <p key={`para-${index}`} className="text-gray-300 leading-relaxed">
+          {line}
+        </p>
+      );
+    });
+
+    return result;
   };
 
   return (
@@ -749,19 +744,24 @@ export default function ResumeAnalyzer() {
 
             {/* Content Section */}
             <div className="bg-[#1e293b] p-6 sm:p-8 rounded-b-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] border-b border-x border-[#334155]">
-              <div className="space-y-6">
-                {formatAnalysisContent(analysis)}
-              </div>
-              
+              <div className="space-y-6">{formatAnalysisContent(analysis)}</div>
+
               {/* Summary Footer */}
               <div className="mt-8 pt-6 border-t border-[#334155]">
                 <div className="bg-gradient-to-r from-blue-500/10 to-purple-600/10 border border-blue-500/20 rounded-lg p-4">
                   <div className="flex items-center gap-3 mb-2">
-                    <FontAwesomeIcon icon={faLightbulb} className="text-yellow-400" />
-                    <span className="font-semibold text-yellow-400">Pro Tip</span>
+                    <FontAwesomeIcon
+                      icon={faLightbulb}
+                      className="text-yellow-400"
+                    />
+                    <span className="font-semibold text-yellow-400">
+                      Pro Tip
+                    </span>
                   </div>
                   <p className="text-gray-300 text-base">
-                    Focus on implementing the missing skills and improving the highlighted sections to significantly boost your resume's impact.
+                    Focus on implementing the missing skills and improving the
+                    highlighted sections to significantly boost your resume's
+                    impact.
                   </p>
                 </div>
               </div>
