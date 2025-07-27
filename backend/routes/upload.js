@@ -112,7 +112,7 @@ const storage = multer.diskStorage({
     cb(null, uploadPath);
   },
   filename: function (req, file, cb) {
- 
+
     const cleanName = file.originalname.replace(/[^a-zA-Z0-9._-]/g, "_");
     cb(null, Date.now() + "_" + cleanName);
   },
@@ -124,8 +124,8 @@ const fileFilter = (req, file, cb) => {
     "application/octet-stream",
     "application/x-pdf"
   ];
-  
-  if (validMimeTypes.includes(file.mimetype)) {  
+
+  if (validMimeTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
     cb(new Error("Only PDF files are allowed"), false);
@@ -147,7 +147,7 @@ const ai = new GoogleGenAI({
 
 router.post("/resume", upload.single("resume"), async (req, res) => {
   if (!req.file) {
-    return res.status(400).json({ 
+    return res.status(400).json({
       message: "No file uploaded or file type not supported",
       details: "Please upload a PDF file"
     });
@@ -157,28 +157,54 @@ router.post("/resume", upload.single("resume"), async (req, res) => {
 
   try {
     // Check if file exists and is readable
-    if (!fs.existsSync(filePath)) {  
+    if (!fs.existsSync(filePath)) {
       throw new Error("File upload failed - file not saved properly");
     }
 
     const buffer = fs.readFileSync(filePath);
     const data = await pdfParse(buffer);
-    
+
     if (!data.text || data.text.length < 10) {
       throw new Error("The uploaded PDF doesn't contain readable text");
     }
 
-    const prompt = `Analyze this resume and provide short means not so big suggestions:
-                1. Missing important skills
-                2. Sections that need improvement
-                3. Project recommendations
-                4. Overall improvements
-                5. Formate of Resume
-                6. Grammatical errors if any
-                7. Formal Language is used in the resume or not 
-                if you have provided any other document then just say that the provided document is not resume please upload the resume for analysis
-                and if it is a resume then do not write The provided document is indeed a resume and will be analyzed just provide suggestions.
-                ${data.text}`; 
+    const prompt = `Analyze this resume thoroughly and provide feedback in the following exact format:
+
+---
+
+**Missing important skills:**
+[Identify 3-5 crucial hard/soft skills absent from the resume that are relevant to the target role. List as plain text items separated by new lines]
+
+**Sections that need improvement:**
+[Name 2-4 resume sections requiring enhancement. For each, provide 1 specific improvement suggestion per line]
+
+**Project recommendations:**
+[Suggest 2-3 project improvements or additions. Each recommendation on a new line]
+
+**Overall improvements:**
+[3-4 high-impact suggestions to strengthen the entire resume. One per line]
+
+**Format of Resume:**
+[Note 2-3 formatting issues (e.g., spacing, fonts, section ordering) with specific fixes]
+
+**Grammatical errors if any:**
+[List any found grammatical errors with corrections. Write "None detected" if none]
+
+**Formal Language is used in the resume or not:**
+[Answer Yes/No with 1-2 sentence explanation]
+
+**Pro Tip:**
+[Provide one actionable, industry-specific advice to make the resume stand out]
+
+---
+
+Guidelines:
+1. Never use bullet points symbols (*, -, •)
+2. Keep all suggestions actionable and specific
+3. Focus on both content and presentation
+4. Maintain professional but approachable tone
+5. Prioritize suggestions by potential impact
+                ${data.text}`;
 
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
