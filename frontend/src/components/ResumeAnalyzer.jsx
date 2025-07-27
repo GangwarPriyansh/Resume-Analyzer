@@ -543,7 +543,10 @@ export default function ResumeAnalyzer() {
                     // Format bullet points
                     if (line.trim().startsWith('*')) {
                       const text = line.replace(/^\*\s*/, '');
-                      const parts = text.split(':');
+                      
+                      // Remove markdown formatting and apply bold styling
+                      const formattedText = text.replace(/\*\*(.*?)\*\*/g, '$1');
+                      const parts = formattedText.split(':');
                       
                       return (
                         <div key={lineIndex} className="flex items-start gap-3 text-gray-300">
@@ -553,11 +556,11 @@ export default function ResumeAnalyzer() {
                           <div className="flex-1">
                             {parts.length > 1 ? (
                               <>
-                                <span className="font-medium text-white">{parts[0]}:</span>
+                                <span className="font-bold text-white">{parts[0]}:</span>
                                 <span className="ml-1">{parts.slice(1).join(':')}</span>
                               </>
                             ) : (
-                              <span>{text}</span>
+                              <span className="font-medium">{formattedText}</span>
                             )}
                           </div>
                         </div>
