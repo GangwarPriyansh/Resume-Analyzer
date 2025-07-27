@@ -198,15 +198,15 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setUser } from "../slice/userSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { 
-  faEye, 
-  faEyeSlash, 
-  faUser, 
-  faEnvelope, 
-  faPhone, 
+import {
+  faEye,
+  faEyeSlash,
+  faUser,
+  faEnvelope,
+  faPhone,
   faLock,
   faUserPlus,
-  faSignInAlt
+  faSignInAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function SignUpForm() {
@@ -276,142 +276,137 @@ export default function SignUpForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1a202c] to-[#2d3748] pt-24 pb-12 px-4">
+    <div className="min-h-screen bg-gradient-to-b from-[#1a202c] to-[#2d3748] pt-16 pb-12 px-4">
       <div className="max-w-md mx-auto">
         {/* Header Section */}
-        <div className="text-center mb-8">
-          <div className="bg-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-            <FontAwesomeIcon icon={faUserPlus} className="text-white text-2xl" />
-          </div>
-          <h1 className="text-3xl font-bold text-white mb-2">Join ResumeBuddy</h1>
+        <div className="text-center mb-6">
+          <h1 className="text-3xl font-bold text-white mb-3 flex items-center justify-center">
+            Join ResumeBuddy
+            <span className="bg-blue-600 w-10 h-10 rounded-full flex items-center justify-center ml-3">
+              <FontAwesomeIcon
+                icon={faUserPlus}
+                className="text-white text-lg"
+              />
+            </span>
+          </h1>
           <p className="text-gray-300">
-            Create your account and start building professional resumes in minutes
+            Create your account and start building professional resumes in
+            minutes
           </p>
         </div>
 
         {/* Form Container */}
-        <div className="bg-[#1c2331] p-8 rounded-xl shadow-2xl border border-[#2d3748]">
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Name Field */}
+        <div className="bg-[#1c2331] p-6 rounded-xl shadow-2xl border border-[#2d3748]">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="group">
-              <label htmlFor="name" className="text-gray-300 mb-2 flex items-center">
+              <label className="text-gray-300 mb-1 flex items-center">
                 <FontAwesomeIcon icon={faUser} className="mr-2 text-blue-400" />
                 Full Name
               </label>
               <input
-                id="name"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 rounded-lg bg-[#2b313c] border border-[#3a4556] text-white 
+                className="w-full px-4 py-2 rounded-lg bg-[#2b313c] border border-[#3a4556] text-white 
                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
                           hover:border-blue-400 transition-all"
-                placeholder="John Doe"
               />
             </div>
 
-            {/* Email Field */}
             <div className="group">
-              <label htmlFor="email" className="text-gray-300 mb-2 flex items-center">
-                <FontAwesomeIcon icon={faEnvelope} className="mr-2 text-blue-400" />
+              <label className="text-gray-300 mb-1 flex items-center">
+                <FontAwesomeIcon
+                  icon={faEnvelope}
+                  className="mr-2 text-blue-400"
+                />
                 Email Address
               </label>
               <input
-                id="email"
                 name="email"
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 rounded-lg bg-[#2b313c] border border-[#3a4556] text-white 
+                className="w-full px-4 py-2 rounded-lg bg-[#2b313c] border border-[#3a4556] text-white 
                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
                           hover:border-blue-400 transition-all"
-                placeholder="john@example.com"
               />
             </div>
 
-            {/* Phone Number Field */}
             <div className="group">
-              <label htmlFor="number" className="text-gray-300 mb-2 flex items-center">
-                <FontAwesomeIcon icon={faPhone} className="mr-2 text-blue-400" />
+              <label className="text-gray-300 mb-1 flex items-center">
+                <FontAwesomeIcon
+                  icon={faPhone}
+                  className="mr-2 text-blue-400"
+                />
                 Phone Number
               </label>
               <input
-                id="number"
                 name="number"
                 value={formData.number}
                 onChange={handleChange}
                 required
                 pattern="[0-9]{10,15}"
                 title="Please enter a valid phone number"
-                className="w-full px-4 py-3 rounded-lg bg-[#2b313c] border border-[#3a4556] text-white 
+                className="w-full px-4 py-2 rounded-lg bg-[#2b313c] border border-[#3a4556] text-white 
                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
                           hover:border-blue-400 transition-all"
-                placeholder="1234567890"
               />
             </div>
 
-            {/* Password Field */}
             <div className="group relative">
-              <label htmlFor="password" className="text-gray-300 mb-2 flex items-center">
+              <label className="text-gray-300 mb-1 flex items-center">
                 <FontAwesomeIcon icon={faLock} className="mr-2 text-blue-400" />
                 Password
               </label>
               <input
-                id="password"
                 name="password"
                 type={showPassword ? "text" : "password"}
                 value={formData.password}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 pr-10 rounded-lg bg-[#2b313c] border border-[#3a4556] text-white 
+                className="w-full px-4 py-2 pr-10 rounded-lg bg-[#2b313c] border border-[#3a4556] text-white 
                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
                           hover:border-blue-400 transition-all"
               />
               <FontAwesomeIcon
                 icon={showPassword ? faEyeSlash : faEye}
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-[50%] text-gray-400 hover:text-gray-300 cursor-pointer"
+                className="absolute right-3 top-[50%] translate-y-[40%] text-gray-400 hover:text-gray-300 cursor-pointer"
               />
             </div>
 
-            {/* Confirm Password Field */}
             <div className="group relative">
-              <label htmlFor="confirmPassword" className="text-gray-300 mb-2 flex items-center">
+              <label className="text-gray-300 mb-1 flex items-center">
                 <FontAwesomeIcon icon={faLock} className="mr-2 text-blue-400" />
                 Confirm Password
               </label>
               <input
-                id="confirmPassword"
                 name="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 pr-10 rounded-lg bg-[#2b313c] border border-[#3a4556] text-white 
+                className="w-full px-4 py-2 pr-10 rounded-lg bg-[#2b313c] border border-[#3a4556] text-white 
                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
                           hover:border-blue-400 transition-all"
               />
               <FontAwesomeIcon
                 icon={showConfirmPassword ? faEyeSlash : faEye}
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-[50%] text-gray-400 hover:text-gray-300 cursor-pointer"
+                className="absolute right-3 top-[50%] translate-y-[40%] text-gray-400 hover:text-gray-300 cursor-pointer"
               />
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 rounded-lg 
-                        hover:from-blue-700 hover:to-blue-800 transition-all transform hover:-translate-y-0.5 
-                        shadow-lg mt-6 flex items-center justify-center gap-2"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg mt-4
+                        transition transform hover:-translate-y-0.5 hover:shadow-lg"
             >
-              <FontAwesomeIcon icon={faUserPlus} />
               Create Account
             </button>
 
-            {/* Login Link */}
             <div className="text-center text-gray-400 mt-4">
               Already have an account?{" "}
               <button
@@ -420,7 +415,7 @@ export default function SignUpForm() {
                 className="text-blue-400 hover:text-blue-300 font-medium flex items-center justify-center gap-1 mx-auto"
               >
                 <FontAwesomeIcon icon={faSignInAlt} />
-                Sign In
+                Login
               </button>
             </div>
           </form>
