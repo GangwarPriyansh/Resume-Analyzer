@@ -496,11 +496,8 @@ export default function ResumeAnalyzer() {
   const formatAnalysisContent = (content) => {
     if (!content) return "";
 
-    // Clean up content and remove all asterisks from titles
-    const cleanContent = content.replace(/\*+([^*]+)\*+/g, '$1');
-    
     // Split content into sections
-    const sections = cleanContent.split(/(?=\d+\.\s)/);
+    const sections = content.split(/(?=\d+\.\s)/);
     
     return sections.map((section, index) => {
       if (!section.trim()) return null;
@@ -510,8 +507,8 @@ export default function ResumeAnalyzer() {
       
       if (isMainSection) {
         const lines = section.trim().split('\n');
-        let title = lines[0].replace(/^\d+\.\s/, '').replace(/\*+/g, '').trim();
-        const contentLines = lines.slice(1);
+        const title = lines[0].replace(/^\d+\.\s/, '');
+        const content = lines.slice(1).join('\n');
 
         // Determine section type based on keywords
         const getSectionType = (title) => {
@@ -529,73 +526,50 @@ export default function ResumeAnalyzer() {
 
         const sectionType = getSectionType(title);
 
-        // Group content by subsections (like SKILLS:, EXPERIENCE:, etc.)
-        const groupedContent = [];
-        let currentSubsection = null;
-        let currentItems = [];
-
-        contentLines.forEach(line => {
-          const trimmedLine = line.trim();
-          if (!trimmedLine) return;
-
-          // Check if this is a subsection header (all caps followed by colon)
-          if (/^[A-Z\s]+:$/.test(trimmedLine)) {
-            // Save previous subsection if exists
-            if (currentSubsection) {
-              groupedContent.push({ header: currentSubsection, items: currentItems });
-            }
-            // Start new subsection
-            currentSubsection = trimmedLine.replace(':', '');
-            currentItems = [];
-          } else if (trimmedLine.startsWith('*') || trimmedLine.startsWith('-')) {
-            // This is a bullet point item
-            const text = trimmedLine.replace(/^[\*\-]\s*/, '').replace(/\*+/g, '');
-            currentItems.push(text);
-          } else if (currentSubsection) {
-            // This is continuation of previous item or a new item
-            currentItems.push(trimmedLine.replace(/\*+/g, ''));
-          } else {
-            // This is general content not under a subsection
-            groupedContent.push({ header: null, items: [trimmedLine.replace(/\*+/g, '')] });
-          }
-        });
-
-        // Add the last subsection if it exists
-        if (currentSubsection) {
-          groupedContent.push({ header: currentSubsection, items: currentItems });
-        }
-
         return (
-          <div key={index} className={`${sectionType.bgColor} ${sectionType.borderColor} border rounded-xl p-4 sm:p-6 mb-4 sm:mb-6 backdrop-blur-sm`}>
-            <div className="flex items-start gap-3 sm:gap-4">
-              <div className={`${sectionType.color} mt-1 flex-shrink-0`}>
-                <FontAwesomeIcon icon={sectionType.icon} className="text-base sm:text-lg" />
+          <div key={index} className={`${sectionType.bgColor} ${sectionType.borderColor} border rounded-xl p-6 mb-6 backdrop-blur-sm`}>
+            <div className="flex items-start gap-4">
+              <div className={`${sectionType.color} mt-1`}>
+                <FontAwesomeIcon icon={sectionType.icon} className="text-lg" />
               </div>
-              <div className="flex-1 min-w-0">
-                <h4 className={`text-base sm:text-lg font-bold ${sectionType.color} mb-3`}>
+              <div className="flex-1">
+                <h4 className={`text-lg font-semibold ${sectionType.color} mb-3`}>
                   {title}
                 </h4>
-                <div className="space-y-3 sm:space-y-4">
-                  {groupedContent.map((group, groupIndex) => (
-                    <div key={groupIndex}>
-                      {group.header && (
-                        <h5 className="font-bold text-white mb-2 text-sm sm:text-base">
-                          {group.header}:
-                        </h5>
-                      )}
-                      <div className="space-y-2">
-                        {group.items.map((item, itemIndex) => {
-                          if (!item.trim()) return null;
-                          
-                          return (
-                            <div key={itemIndex} className="text-gray-300 text-sm sm:text-base leading-relaxed">
-                              {item.trim()}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  ))}
+                <div className="space-y-2">
+                  {content.split('\n').map((line, lineIndex) => {
+                    if (!line.trim()) return null;
+                    
+                    // Format bullet points
+                    if (line.trim().startsWith('*')) {
+                      const text = line.replace(/^\*\s*/, '');
+                      const parts = text.split(':');
+                      
+                      return (
+                        <div key={lineIndex} className="flex items-start gap-3 text-gray-300">
+                          <div className={`${sectionType.color} mt-1.5`}>
+                            <div className="w-1.5 h-1.5 rounded-full bg-current"></div>
+                          </div>
+                          <div className="flex-1">
+                            {parts.length > 1 ? (
+                              <>
+                                <span className="font-medium text-white">{parts[0]}:</span>
+                                <span className="ml-1">{parts.slice(1).join(':')}</span>
+                              </>
+                            ) : (
+                              <span>{text}</span>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    }
+                    
+                    return (
+                      <p key={lineIndex} className="text-gray-300 leading-relaxed">
+                        {line.trim()}
+                      </p>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -783,7 +757,7 @@ export default function ResumeAnalyzer() {
                     <FontAwesomeIcon icon={faLightbulb} className="text-yellow-400" />
                     <span className="font-semibold text-yellow-400">Pro Tip</span>
                   </div>
-                  <p className="text-gray-300 text-base">
+                  <p className="text-gray-300 text-sm">
                     Focus on implementing the missing skills and improving the highlighted sections to significantly boost your resume's impact.
                   </p>
                 </div>
