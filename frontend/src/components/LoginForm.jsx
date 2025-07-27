@@ -95,7 +95,7 @@
 //             />
 //             <FontAwesomeIcon
 //               icon={showPassword ? faEyeSlash : faEye}
-//               onClick={() => setShowPassword(!showPassword)} 
+//               onClick={() => setShowPassword(!showPassword)}
 //               className="absolute right-3 top-[50%] translate-y-[40%] text-gray-400 hover:text-gray-300 cursor-pointer"
 //             />
 //           </div>
@@ -129,13 +129,13 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setUser } from "../slice/userSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { 
-  faEye, 
-  faEyeSlash, 
-  faEnvelope, 
+import {
+  faEye,
+  faEyeSlash,
+  faEnvelope,
   faLock,
   faSignInAlt,
-  faUserPlus
+  faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function LoginForm() {
@@ -155,13 +155,16 @@ export default function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("https://resume-analyzer-6lys.onrender.com/api/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const res = await fetch(
+        "https://resume-analyzer-6lys.onrender.com/api/users/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       const data = await res.json();
 
@@ -189,14 +192,19 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1a202c] to-[#2d3748] pt-24 pb-12 px-4">
+    <div className="min-h-screen bg-gradient-to-b from-[#1a202c] to-[#2d3748] pt-16 pb-12 px-4">
       <div className="max-w-md mx-auto">
         {/* Header Section */}
-        <div className="text-center mb-8">
-          <div className="bg-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-            <FontAwesomeIcon icon={faSignInAlt} className="text-white text-2xl" />
-          </div>
-          <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
+        <div className="text-center mb-6">
+          <h1 className="text-3xl font-bold text-white mb-3 flex items-center justify-center">
+            Welcome Back
+            <span className="bg-blue-600 w-10 h-10 rounded-full flex items-center justify-center ml-3">
+              <FontAwesomeIcon
+                icon={faSignInAlt}
+                className="text-white text-lg"
+              />
+            </span>
+          </h1>
           <p className="text-gray-300">
             Sign in to access your resume builder dashboard
           </p>
@@ -207,8 +215,14 @@ export default function LoginForm() {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email Field */}
             <div className="group">
-              <label htmlFor="email" className="text-gray-300 mb-2 flex items-center">
-                <FontAwesomeIcon icon={faEnvelope} className="mr-2 text-blue-400" />
+              <label
+                htmlFor="email"
+                className="text-gray-300 mb-2 flex items-center"
+              >
+                <FontAwesomeIcon
+                  icon={faEnvelope}
+                  className="mr-2 text-blue-400"
+                />
                 Email Address
               </label>
               <input
@@ -221,13 +235,15 @@ export default function LoginForm() {
                 className="w-full px-4 py-3 rounded-lg bg-[#2b313c] border border-[#3a4556] text-white 
                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
                           hover:border-blue-400 transition-all"
-                placeholder="your@email.com"
               />
             </div>
 
             {/* Password Field */}
             <div className="group relative">
-              <label htmlFor="password" className="text-gray-300 mb-2 flex items-center">
+              <label
+                htmlFor="password"
+                className="text-gray-300 mb-2 flex items-center"
+              >
                 <FontAwesomeIcon icon={faLock} className="mr-2 text-blue-400" />
                 Password
               </label>
@@ -241,12 +257,11 @@ export default function LoginForm() {
                 className="w-full px-4 py-3 pr-10 rounded-lg bg-[#2b313c] border border-[#3a4556] text-white 
                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
                           hover:border-blue-400 transition-all"
-                placeholder="••••••••"
               />
               <FontAwesomeIcon
                 icon={showPassword ? faEyeSlash : faEye}
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-[50%] text-gray-400 hover:text-gray-300 cursor-pointer"
+                className="absolute right-3 top-[50%] translate-y-[4  0%] text-gray-400 hover:text-gray-300 cursor-pointer"
               />
             </div>
 
