@@ -544,8 +544,8 @@ export default function ResumeAnalyzer() {
                     if (line.trim().startsWith('*')) {
                       const text = line.replace(/^\*\s*/, '');
                       
-                      // Remove markdown formatting and apply bold styling
-                      const formattedText = text.replace(/\*\*(.*?)\*\*/g, '$1');
+                      // Remove all markdown formatting (asterisks)
+                      const formattedText = text.replace(/\*+/g, '');
                       const parts = formattedText.split(':');
                       
                       return (
@@ -760,7 +760,7 @@ export default function ResumeAnalyzer() {
                     <FontAwesomeIcon icon={faLightbulb} className="text-yellow-400" />
                     <span className="font-semibold text-yellow-400">Pro Tip</span>
                   </div>
-                  <p className="text-gray-300 text-sm">
+                  <p className="text-gray-300 text-base">
                     Focus on implementing the missing skills and improving the highlighted sections to significantly boost your resume's impact.
                   </p>
                 </div>
