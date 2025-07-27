@@ -495,6 +495,8 @@ export default function ResumeForm() {
   // Effect to pre-fill basic user data from Redux
   useEffect(() => {
     if (user) {
+      console.log("Pre-filling user data:", user);
+      console.log(user.name, user.email, user.number);
       // Dispatch individual updates for name, email, and contact (number)
       if (user.name) dispatch(updateField({ name: "name", value: user.name }));
       if (user.email) dispatch(updateField({ name: "email", value: user.email }));
