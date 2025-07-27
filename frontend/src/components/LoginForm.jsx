@@ -196,7 +196,7 @@ export default function LoginForm() {
       <div className="max-w-md mx-auto">
         {/* Header Section */}
         <div className="text-center mb-6">
-          <h1 className="text-3xl font-bold text-white mb-3 flex items-center justify-center">
+          <h1 className="text-4xl font-extrabold text-white mb-3 flex items-center justify-center">
             Welcome Back
             <span className="bg-blue-600 w-10 h-10 rounded-full flex items-center justify-center ml-3">
               <FontAwesomeIcon
@@ -205,7 +205,7 @@ export default function LoginForm() {
               />
             </span>
           </h1>
-          <p className="text-gray-300">
+          <p className="text-gray-300 font-normal sm:text-sm md:font-medium lg:font-medium">
             Sign in to access your resume builder dashboard
           </p>
         </div>
