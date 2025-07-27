@@ -26,8 +26,6 @@ export default function ResumeAnalyzer() {
   const [loading, setLoading] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [filePreviewUrl, setFilePreviewUrl] = useState(null);
-
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (filePreviewUrl) {
@@ -35,8 +33,6 @@ export default function ResumeAnalyzer() {
       }
     };
   }, [filePreviewUrl]);
-
-  // Restore file on page refresh
   useEffect(() => {
     const savedFileData = sessionStorage.getItem("resumeFileData");
     if (savedFileData) {
@@ -440,21 +436,21 @@ export default function ResumeAnalyzer() {
                   />
                 </div>
                 <div>
-                  <h3 className="text-3xl font-bold text-white mb-1">
+                  <h3 className="text-2xl sm:text-2xl md:text-3xl lg:text-5xl font-bold text-white mb-1">
                     AI Analysis Results
                   </h3>
-                  <p className="text-blue-300 text-sm">
+                  <p className="text-blue-300 text-xs sm:text-xs md:text-sm lg:text-lg">
                     Here are actionable insights to improve your resume
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Content Section */}
             <div className="bg-[#1e293b] p-6 sm:p-8 rounded-b-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] border-b border-x border-[#334155]">
               <div className="space-y-6">{formatAnalysisContent(analysis)}</div>
 
               {/* Summary Footer */}
+
               {/* <div className="mt-8 pt-6 border-t border-[#334155]">
                 <div className="bg-gradient-to-r from-blue-500/10 to-purple-600/10 border border-blue-500/20 rounded-lg p-4">
                   <div className="flex items-center gap-3 mb-2">
@@ -473,25 +469,6 @@ export default function ResumeAnalyzer() {
                   </p>
                 </div>
               </div> */}
-
-              <div className="mt-8 pt-6 border-t border-[#334155]">
-                <div className="bg-gradient-to-r from-blue-500/10 to-purple-600/10 border border-blue-500/20 rounded-lg p-4 sm:p-5">
-                  <div className="flex items-center gap-3 mb-2 sm:mb-3">
-                    <FontAwesomeIcon
-                      icon={faLightbulb}
-                      className="text-yellow-400 text-lg sm:text-xl"
-                    />
-                    <span className="font-extrabold text-xl sm:text-2xl md:text-3xl text-yellow-400">
-                      Pro Tip
-                    </span>
-                  </div>
-                  <p className="text-gray-300 text-base sm:text-lg">
-                    Focus on implementing the missing skills and improving the
-                    highlighted sections to significantly boost your resume's
-                    impact.
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         )}
