@@ -41,6 +41,7 @@ export default function LoginForm() {
             user: {
               name: data.user.name,
               email: data.user.email,
+              number: data.user.number,
             },
             token: data.token,
             isAuthenticated: true,
