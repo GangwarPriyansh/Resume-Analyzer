@@ -145,8 +145,11 @@ export default function ResumeAnalyzer() {
   const formatAnalysisContent = (content) => {
     if (!content) return "";
 
+    // Clean up content and remove ALL asterisks
+    const cleanContent = content.replace(/\*+/g, '');
+    
     // Split content into sections
-    const sections = content.split(/(?=\d+\.\s)/);
+    const sections = cleanContent.split(/(?=\d+\.\s)/);
     
     return sections.map((section, index) => {
       if (!section.trim()) return null;
@@ -156,8 +159,8 @@ export default function ResumeAnalyzer() {
       
       if (isMainSection) {
         const lines = section.trim().split('\n');
-        const title = lines[0].replace(/^\d+\.\s/, '');
-        const content = lines.slice(1).join('\n');
+        let title = lines[0].replace(/^\d+\.\s/, '').trim();
+        const contentLines = lines.slice(1);
 
         // Determine section type based on keywords
         const getSectionType = (title) => {
@@ -175,49 +178,60 @@ export default function ResumeAnalyzer() {
 
         const sectionType = getSectionType(title);
 
+        // Process content to identify headings and regular content
+        const processedContent = [];
+        
+        contentLines.forEach(line => {
+          const trimmedLine = line.trim();
+          if (!trimmedLine) return;
+
+          // Check if this line looks like a heading (ends with colon or starts with capital letter and is short)
+          const isHeading = trimmedLine.endsWith(':') || 
+                          (/^[A-Z][^.]*:/.test(trimmedLine)) ||
+                          (/^[A-Z\s]+:$/.test(trimmedLine));
+
+          if (isHeading) {
+            // This is a heading
+            const headingText = trimmedLine.replace(':', '');
+            processedContent.push({ 
+              type: 'heading', 
+              content: headingText 
+            });
+          } else {
+            // This is regular content
+            const cleanText = trimmedLine.replace(/^[\*\-]\s*/, '');
+            processedContent.push({ 
+              type: 'content', 
+              content: cleanText 
+            });
+          }
+        });
+
         return (
-          <div key={index} className={`${sectionType.bgColor} ${sectionType.borderColor} border rounded-xl p-6 mb-6 backdrop-blur-sm`}>
-            <div className="flex items-start gap-4">
-              <div className={`${sectionType.color} mt-1`}>
-                <FontAwesomeIcon icon={sectionType.icon} className="text-lg" />
+          <div key={index} className={`${sectionType.bgColor} ${sectionType.borderColor} border rounded-xl p-3 sm:p-4 md:p-6 mb-3 sm:mb-4 md:mb-6 backdrop-blur-sm`}>
+            <div className="flex items-start gap-2 sm:gap-3 md:gap-4">
+              <div className={`${sectionType.color} mt-1 flex-shrink-0`}>
+                <FontAwesomeIcon icon={sectionType.icon} className="text-sm sm:text-base md:text-lg" />
               </div>
-              <div className="flex-1">
-                <h4 className={`text-lg font-semibold ${sectionType.color} mb-3`}>
+              <div className="flex-1 min-w-0">
+                <h4 className={`text-sm sm:text-base md:text-lg lg:text-xl font-bold ${sectionType.color} mb-2 sm:mb-3`}>
                   {title}
                 </h4>
-                <div className="space-y-2">
-                  {content.split('\n').map((line, lineIndex) => {
-                    if (!line.trim()) return null;
-                    
-                    // Format bullet points
-                    if (line.trim().startsWith('*')) {
-                      const text = line.replace(/^\*\s*/, '');
-                      const parts = text.split(':');
-                      
+                <div className="space-y-2 sm:space-y-3">
+                  {processedContent.map((item, itemIndex) => {
+                    if (item.type === 'heading') {
                       return (
-                        <div key={lineIndex} className="flex items-start gap-3 text-gray-300">
-                          <div className={`${sectionType.color} mt-1.5`}>
-                            <div className="w-1.5 h-1.5 rounded-full bg-current"></div>
-                          </div>
-                          <div className="flex-1">
-                            {parts.length > 1 ? (
-                              <>
-                                <span className="font-medium text-white">{parts[0]}:</span>
-                                <span className="ml-1">{parts.slice(1).join(':')}</span>
-                              </>
-                            ) : (
-                              <span>{text}</span>
-                            )}
-                          </div>
+                        <h5 key={itemIndex} className="font-bold text-white text-xs sm:text-sm md:text-base bg-gray-700/30 px-2 py-1 rounded border-l-4 border-blue-400 mt-3 first:mt-0">
+                          {item.content}
+                        </h5>
+                      );
+                    } else {
+                      return (
+                        <div key={itemIndex} className="text-gray-300 text-xs sm:text-sm md:text-base leading-relaxed pl-4">
+                          {item.content}
                         </div>
                       );
                     }
-                    
-                    return (
-                      <p key={lineIndex} className="text-gray-300 leading-relaxed">
-                        {line.trim()}
-                      </p>
-                    );
                   })}
                 </div>
               </div>
@@ -406,7 +420,7 @@ export default function ResumeAnalyzer() {
                     <FontAwesomeIcon icon={faLightbulb} className="text-yellow-400" />
                     <span className="font-semibold text-yellow-400">Pro Tip</span>
                   </div>
-                  <p className="text-gray-300 text-sm">
+                  <p className="text-gray-300 text-base">
                     Focus on implementing the missing skills and improving the highlighted sections to significantly boost your resume's impact.
                   </p>
                 </div>
