@@ -211,14 +211,10 @@ export default function LoginForm() {
         </div>
 
         {/* Form Container */}
-        <div className="bg-[#1c2331] p-8 rounded-xl shadow-2xl border border-[#2d3748]">
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Email Field */}
+        <div className="bg-[#1c2331] p-6 rounded-xl shadow-2xl border border-[#2d3748]">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="group">
-              <label
-                htmlFor="email"
-                className="text-gray-300 mb-2 flex items-center"
-              >
+              <label className="text-gray-300 mb-1 flex items-center">
                 <FontAwesomeIcon
                   icon={faEnvelope}
                   className="mr-2 text-blue-400"
@@ -226,13 +222,12 @@ export default function LoginForm() {
                 Email Address
               </label>
               <input
-                id="email"
                 name="email"
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 rounded-lg bg-[#2b313c] border border-[#3a4556] text-white 
+                className="w-full px-4 py-2 rounded-lg bg-[#2b313c] border border-[#3a4556] text-white 
                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
                           hover:border-blue-400 transition-all"
               />
@@ -240,43 +235,35 @@ export default function LoginForm() {
 
             {/* Password Field */}
             <div className="group relative">
-              <label
-                htmlFor="password"
-                className="text-gray-300 mb-2 flex items-center"
-              >
+              <label className="text-gray-300 mb-1 flex items-center">
                 <FontAwesomeIcon icon={faLock} className="mr-2 text-blue-400" />
                 Password
               </label>
               <input
-                id="password"
                 name="password"
                 type={showPassword ? "text" : "password"}
                 value={formData.password}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 pr-10 rounded-lg bg-[#2b313c] border border-[#3a4556] text-white 
+                className="w-full px-4 py-2 pr-10 rounded-lg bg-[#2b313c] border border-[#3a4556] text-white 
                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
                           hover:border-blue-400 transition-all"
               />
               <FontAwesomeIcon
                 icon={showPassword ? faEyeSlash : faEye}
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-[50%] translate-y-[4  0%] text-gray-400 hover:text-gray-300 cursor-pointer"
+                className="absolute right-3 top-[50%] translate-y-[40%] text-gray-400 hover:text-gray-300 cursor-pointer"
               />
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 rounded-lg 
-                        hover:from-blue-700 hover:to-blue-800 transition-all transform hover:-translate-y-0.5 
-                        shadow-lg mt-6 flex items-center justify-center gap-2"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg mt-4
+                        transition transform hover:-translate-y-0.5 hover:shadow-lg"
             >
-              <FontAwesomeIcon icon={faSignInAlt} />
               Login
             </button>
 
-            {/* Sign Up Link */}
             <div className="text-center text-gray-400 mt-4">
               Don't have an account?{" "}
               <button
