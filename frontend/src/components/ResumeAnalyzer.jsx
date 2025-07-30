@@ -128,11 +128,25 @@ export default function ResumeAnalyzer() {
       dispatch(setAnalysisResult(data.analysis));
     } catch (err) {
       console.error("Upload/AI Error:", err);
-      toast.error(
-        err.message.includes("Failed to fetch")
-          ? "Network error. Please check your connection or use Wi-Fi."
-          : `Upload failed: ${err.message}`
-      );
+      // toast.error(
+      //   err.message.includes("Failed to fetch")
+      //     ? "Network error. Please check your connection or use Wi-Fi."
+      //     : `Upload failed: ${err.message}`
+      // );
+
+      if (err.message.includes("not a resume")) {
+        dispatch(
+          setAnalysisResult(
+            "The provided document is not a resume. Please upload a proper resume document for analysis."
+          )
+        );
+      } else {
+        toast.error(
+          err.message.includes("Failed to fetch")
+            ? "Network error. Please check your connection or use Wi-Fi."
+            : `Upload failed: ${err.message}`
+        );
+      }
     } finally {
       setLoading(false);
     }
@@ -140,6 +154,38 @@ export default function ResumeAnalyzer() {
 
   const formatAnalysisContent = (content) => {
     if (!content) return "";
+
+    // Special case for non-resume documents
+    if (
+      content.toLowerCase().includes("not a resume") ||
+      content.includes("The provided document is not a resume")
+    ) {
+      return (
+        <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-6 mb-6 backdrop-blur-sm">
+          <div className="flex items-start gap-4">
+            <div className="text-red-400 mt-1 flex-shrink-0">
+              <FontAwesomeIcon
+                icon={faExclamationTriangle}
+                className="text-lg"
+              />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h4 className="text-xl font-bold text-red-400 mb-3">
+                Invalid Document Type
+              </h4>
+              <div className="text-gray-300 text-base leading-relaxed">
+                {content}
+              </div>
+              <div className="mt-4 text-sm text-gray-400">
+                <FontAwesomeIcon icon={faLightbulb} className="mr-2" />
+                Please upload a proper resume document (PDF format) to get
+                analysis results.
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
 
     // Clean up content and remove ALL asterisks
     const cleanContent = content.replace(/\*+/g, "");
