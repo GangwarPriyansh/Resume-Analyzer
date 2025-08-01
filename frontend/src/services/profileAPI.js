@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://resume-analyzer-6lys.onrender.com/api/profile';
+const API_URL = 'https://resume-analyzer-6lys.onrender.com/api/';
 
 // Get user profile
 export const getProfile = async (token) => {
