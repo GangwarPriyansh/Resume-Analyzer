@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUser } from "../slice/userSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronDown,
+import { 
+  faChevronDown, 
   faBars,
   faSignOutAlt,
   faUserCog,
   faHome,
-  faInfoCircle,
+  faInfoCircle
 } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 
@@ -27,7 +27,7 @@ export default function Header() {
   };
 
   const handleChevronClick = (e) => {
-    e.stopPropagation();
+    e.stopPropagation(); 
     setShowDropdown(!showDropdown);
   };
 
@@ -39,8 +39,8 @@ export default function Header() {
 
       {/* Desktop View */}
       <nav className="hidden md:flex font-medium gap-6 items-center">
-        <button
-          onClick={() => navigate("/")}
+        <button 
+          onClick={() => navigate("/")} 
           className="hover:text-blue-400 flex items-center gap-1"
         >
           <FontAwesomeIcon icon={faHome} className="w-4 h-4" />
@@ -71,10 +71,20 @@ export default function Header() {
             </button>
 
             {showDropdown && (
-              <div
+              <div 
                 className="absolute right-0 top-full mt-2 w-48 bg-[#1c2331] rounded-md shadow-lg py-1 z-10 border border-gray-700"
                 onClick={(e) => e.stopPropagation()}
               >
+                <button
+                  onClick={() => {
+                    navigate("/settings");
+                    setShowDropdown(false);
+                  }}
+                  className="w-full text-left px-4 py-2 text-sm hover:text-blue-400 font-medium flex items-center gap-2"
+                >
+                  <FontAwesomeIcon icon={faUserCog} className="w-4 h-4" />
+                  Settings
+                </button>
                 <button
                   onClick={handleLogout}
                   className="w-full text-left px-4 py-2 text-sm hover:text-red-400 font-medium flex items-center gap-2"
@@ -147,6 +157,17 @@ export default function Header() {
 
               {showDropdown && (
                 <div className="flex flex-col gap-2 w-full">
+                  <button
+                    onClick={() => {
+                      navigate("/settings");
+                      setShowMobileMenu(false);
+                      setShowDropdown(false);
+                    }}
+                    className="w-full text-center px-4 py-2 text-sm hover:text-blue-400 font-medium flex items-center justify-center gap-2"
+                  >
+                    <FontAwesomeIcon icon={faUserCog} className="w-4 h-4" />
+                    Settings
+                  </button>
                   <button
                     onClick={() => {
                       handleLogout();

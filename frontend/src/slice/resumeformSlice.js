@@ -43,9 +43,20 @@ const resumeFormSlice = createSlice({
       });
       state.customFields = [];
     },
-     setFormData: (state, action) => { 
+    setFormData: (state, action) => {
       state.formData = { ...state.formData, ...action.payload };
     },
+    updateUserProfile: (state, action) => {
+      const profileData = action.payload;
+      state.formData = {
+        ...state.formData,
+        name: profileData.name || state.formData.name,
+        contact: profileData.number || state.formData.contact,
+        email: profileData.email || state.formData.email,
+        linkedin: profileData.linkedin || state.formData.linkedin,
+        github: profileData.github || state.formData.github
+      };
+    }
   },
 });
 
@@ -55,6 +66,7 @@ export const {
   deleteCustomField,
   clearFormData,
   setFormData,
+  updateUserProfile
 } = resumeFormSlice.actions;
 
 export default resumeFormSlice.reducer;

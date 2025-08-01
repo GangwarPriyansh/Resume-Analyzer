@@ -22,6 +22,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AuthRedirect from "./components/AuthRedirect";
 import About from "./components/about";
 import ScrollToTop from "./ScrollToTop";
+import ProfileSettings from "./components/profileSetting";
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
               <Route path="/login" element={<LoginForm />} />
               <Route path="/signup" element={<SignUpForm />} />
               <Route path="/auth-redirect" element={<AuthRedirect />} />
+              <Route path="/settings" element={<ProfileSettings />} />
 
               {/* Protected Routes are defined here */}
               <Route element={<ProtectedRoute />}>
