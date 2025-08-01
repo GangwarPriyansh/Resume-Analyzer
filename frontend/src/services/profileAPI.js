@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://resume-analyzer-6lys.onrender.com/api/';
+const API_URL = 'https://resume-analyzer-6lys.onrender.com/api';
 
 // Get user profile
 export const getProfile = async (token) => {
@@ -48,7 +48,7 @@ export const uploadPhoto = async (photoFile, token) => {
   };
 
   try {
-    const response = await axios.post(`${API_URL}/upload`, formData, config);
+    const response = await axios.post(`${API_URL}/uploads`, formData, config);
     return response.data;
   } catch (error) {
     throw error.response.data;
